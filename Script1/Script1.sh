@@ -1,6 +1,6 @@
 echo -e '#######################################'
 echo -e '#  Bienvenido al script rico rico     #'
-echo -e '#  ANACONDA,TENSORFLOW,KERAS,         #'
+echo -e '#  ANACONDA,TENSORFLOW,KERAS          #'
 echo -e '#                                     #'
 echo -e '#  Este script esta en construccion.  #'
 echo -e '#               DEEP                  #'
@@ -21,7 +21,27 @@ echo -e 'Conda- Python package manager, le permite instalar paquetes ya compilad
 sleep 1
 echo -e 'Conda también es el administrador del entorno del sistema, le permite crear entornos con diferentes versiones de cualquier cosa (bibliotecas C, bibliotecas de bajo nivel, etc.).'
 sleep 10
-cd /opt/
+cd /opt
 wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh
 chmod +x Anaconda3-5.2.0-Linux-x86_64.sh
+echo -e 'Ahora saldra una licencia con la que hay que estar deacuerdo'
 ./ Anaconda3-5.2.0-Linux-x86_64.sh
+sleep 5
+clear
+echo -e 'Anaconda instalado'
+echo -e 'Tenemos que tener la version 3.6 o superior'
+cd
+python -V
+sleep 3
+source .bashrc
+python -V
+sleep 3
+echo -e 'Si la version es incorrecta leer la linea 36 a 38 del codigo'
+sleep 3
+## Si la versión de Python permanece sin cambios, en .bashrc agregamos la variable de entorno:
+## #added ser instalador anaconda3
+## export PATH = ”/ root / anaconda3 / bin: $ PATH”
+echo -e 'Instalacion correcta.'
+echo -e 'Si todo funciona correctamente ejectura script2.sh'
+chmod +x script2.sh
+sleep 2
