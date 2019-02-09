@@ -3,4 +3,5 @@
 
 
 
-<h4>MetaSploit > [color=red]No terminado[/color] </h4>
+<h4>MetaSploit > No terminado </h4>
+<h4>DeepExploit > No terminado </h4>
