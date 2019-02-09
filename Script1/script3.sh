@@ -16,7 +16,7 @@ sleep 1
 echo -e 'Keras es una biblioteca de red neuronal abierta escrita en Python. Es una superestructura sobre Deeplearning4j, TensorFlow y Theano. Está dirigido a un trabajo eficiente con las redes de capacitación en profundidad, mientras que está diseñado para ser compacto, modular y ampliable. '
 echo -e 'Keras - se instala desde el archivo de dependencia Deep Exploit, y volveremos sobre esto un poco más tarde.'
 cd /opt
-git clone https://github.com/13o-bbr-bbq/machine_learning_security
+sudo git clone https://github.com/13o-bbr-bbq/machine_learning_security
 cd machine_learning_security/DeepExploit
 pip install –r requirements.txt
 sleep 5

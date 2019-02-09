@@ -1,5 +1,5 @@
 sudo pacman –Syy
-sudo pacman -S postgresql
+sudo pacman -S postgresql ruby ruby-bundler rubygems
 sudo curl -L https://get.rvm.io | bash -s stable
 echo -e '-Descargar Metasploit desde Github'
 sleep 1
@@ -27,8 +27,13 @@ sudo passwd postgres
 sleep 1
 echo -e 'cambiar a postgres'
 su postgres
+slep 1
+echo -e 'creando usuario para la base de datos'
 createuser n78 -P -S -R -D
 createdb -O n78 n78
+cat > /opt/metasploit-framework/config/database.yml
+sleep 5
+
 ###              ###
 ### DEPENDENCIAS ###
 ###              ###

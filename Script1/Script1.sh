@@ -21,8 +21,10 @@ echo -e 'Conda- Python package manager, le permite instalar paquetes ya compilad
 sleep 1
 echo -e 'Conda también es el administrador del entorno del sistema, le permite crear entornos con diferentes versiones de cualquier cosa (bibliotecas C, bibliotecas de bajo nivel, etc.).'
 sleep 10
-cd /opt
-wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh
+cd /opt/
+sudo mkdir anaconda3
+cd anaconda3
+sudo wget https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh
 chmod +x Anaconda3-5.2.0-Linux-x86_64.sh
 echo -e 'Ahora saldra una licencia con la que hay que estar deacuerdo'
 ./ Anaconda3-5.2.0-Linux-x86_64.sh
