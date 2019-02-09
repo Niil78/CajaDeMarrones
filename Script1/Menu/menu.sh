@@ -54,7 +54,7 @@ while [ opt != '' ]
         4) clear;
             option_picked "Instalar aplicaciones";
 			chmod +x arch_aplicaciones.sh;
-			sh arch_aplicaciones.sh
+			sh arch_aplicaciones.sh;
             show_menu;
             ;;
 
