@@ -18,7 +18,7 @@ sudo locale-gen
 echo -e '-Configurando la base de datos'
 sleep 10
 sudo chown -R postgres:postgres /var/lib/postgres/
-su postgres -c "initdb –locale en_US.UTF-8 -D ‘/var/lib/postgres/data’"
+su postgres -c "initdb –locale $LANG -E UTF-8 -D ‘/var/lib/postgres/data’";exit
 systemctl start postgresql
 systemctl enable postgresql
 echo -e '-Crear un usuario y una base de datos para Metasploit'
