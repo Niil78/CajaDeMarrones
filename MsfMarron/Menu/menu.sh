@@ -34,30 +34,35 @@ while [ opt != '' ]
         option_picked "Instalar ArchLinux Basico";
         chmod +x arch_basico.sh;
 		sh arch_basico.sh;
-        menu;
+        #show_menu;
         ;;
 
         2) clear;
             option_picked "Instalar ArchLinux Completo";
             chmod +x arch_completo.sh;
 			sh arch_completo.sh;
-        menu;
+        #show_menu;
             ;;
 
         3) clear;
             option_picked "Instalar Gestores";
 			chmod +x arch_gestores.sh;
 			sh arch_gestores.sh;
-            show_menu;
+        #show_menu;
             ;;
 
         4) clear;
             option_picked "Instalar aplicaciones";
 			chmod +x arch_aplicaciones.sh;
 			sh arch_aplicaciones.sh;
-            show_menu;
+         #show_menu;
             ;;
-
+	 5) clear;
+            option_picked "Instalar aplicaciones";
+			chmod +x arch_aplicaciones.sh;
+			sh arch_aplicaciones.sh;
+			
+	;;
         x)exit;
         ;;
 
