@@ -6,8 +6,9 @@ show_menu(){
     RED_TEXT=`echo "\033[31m"`
     ENTER_LINE=`echo "\033[33m"`
     echo -e "${MENU}********************NIIL78*******************${NORMAL}"
-    echo -e "${MENU}**${NUMBER} 1)${MENU} TEXTO ${NORMAL}"
-    echo -e "${MENU}**${NUMBER} 2)${MENU} TEXTO ${NORMAL}"
+    echo -e "${MENU}**${NUMBER} 1)${MENU} Instalar MetaSploit  ${NORMAL}"
+    echo -e "${MENU}**${NUMBER} 2)${MENU} Instalar DeepExploit ${NORMAL}"
+    echo -e "${MENU}**${NUMBER} 9)${MENU} INSTALAR TODAS       ${NORMAL}"
     echo -e "${MENU}*********************************************${NORMAL}"
     echo -e "${ENTER_LINE}Selecciona una opcion del menu ${RED_TEXT}O largate. ${NORMAL}"
     read opt
@@ -31,14 +32,22 @@ while [ opt != '' ]
         option_picked "Instalar MetaSploit(completo)";
         chmod +x MetaSploit/install.sh;
 		    sh MetaSploit/install.sh;
-        #show_menu;
+        show_menu;
         ;;
         2) clear;
         option_picked "Instalar DeepExploit(completo)";
         chmod +x DeepExploit/install.sh;
 			  sh DeepExploit/install.sh;
-        #show_menu;
+        show_menu;
         ;;
+        9) clear;
+        option_picked "Instalar Gestores";
+        chmod +x MetaSploit/install.sh;
+        chmod +x DeepExploit/install.sh;
+        sh MetaSploit/install.sh;
+        sh DeepExploit/install.sh;
+        show_menu;
+            ;;
         x)exit;
         ;;
 
