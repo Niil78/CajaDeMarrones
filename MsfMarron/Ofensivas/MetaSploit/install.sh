@@ -17,6 +17,6 @@ sh ruby.sh
 clear
 sh msf.sh
 clear
-sh msf-1.sh
+sh msf_db.sh
 clear
 echo -e 'Rocket Launch!'
