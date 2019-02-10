@@ -1,0 +1,56 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=airgeddon
+pkgver=1518.3182166
+pkgrel=1
+pkgdesc='Multi-use bash script for Linux systems to audit wireless networks.'
+groups=('blackarch' 'blackarch-wireless' 'blackarch-automation')
+arch=('any')
+url='https://github.com/v1s1t0r1sh3r3/airgeddon'
+license=('GPL3')
+depends=('bash>=4.2' 'xterm' 'iw' 'gawk' 'aircrack-ng' 'net-tools' 'coreutils'
+         'wireless_tools' 'sed')
+optdepends=('hashcat' 'crunch' 'wpaclean' 'mdk3' 'reaver' 'beef' 'hostapd'
+            'lighttpd' 'iptables' 'bettercap' 'ettercap' 'sslstrip' 'dsniff'
+            'bully' 'pixiewps' 'expect' 'dhcp' 'curl' 'ethtool' 'pciutils'
+            'rfkill' 'wget' 'usbutils' 'xorg-xdpyinfo' 'ccze' 'xorg-xset')
+makedepends=('git' 'coreutils' 'binutils')
+source=('git+https://github.com/v1s1t0r1sh3r3/airgeddon.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i 's|auto_update=1|auto_update=0|' airgeddon.sh
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.md \
+    CONTRIBUTING.md
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+
+  rm -rf *.md .github binaries imgs Dockerfile pindb_checksum.txt .editorconfig
+
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/airgeddon
+exec bash airgeddon.sh "\${@}"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+
