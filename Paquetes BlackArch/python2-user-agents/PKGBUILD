@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-user-agents
+pkgver=1.1.0
+pkgrel=2
+pkgdesc='A library to identify devices (phones, tablets) and their capabilities by parsing (browser/HTTP) user agent strings.'
+url='https://github.com/selwin/python-user-agents'
+depends=('python2' 'python2-yaml' 'python2-ua-parser')
+makedepends=('python2-setuptools' )
+license=('unknown:custom')
+arch=('any')
+source=("https://pypi.python.org/packages/be/ff/886a1e2570784ee63b1c4b0fd77037b84087ffe7b7b45f9751285418be34/user-agents-$pkgver.tar.gz")
+sha512sums=('4968c80d21e3f10225b74b00617d012381767657d654c2a085c72dab35756b2e3ac25e42376dd57e5dd4888ea05ecf9787164366fae736d762cc5c02d8fb5aed')
+
+build() {
+  cd "user-agents-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "user-agents-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

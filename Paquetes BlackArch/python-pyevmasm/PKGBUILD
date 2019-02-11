@@ -1,0 +1,29 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-pyevmasm
+pkgver=0.2.0
+pkgrel=1
+pkgdesc='Ethereum Virtual Machine (EVM) assembler and disassembler.'
+arch=('any')
+url='https://pypi.org/project/pyevmasm/#files'
+license=('Apache2')
+depends=('python' 'python-future')
+makedepends=('python-setuptools')
+options=(!emptydirs)
+source=("https://files.pythonhosted.org/packages/aa/07/38255274a55e432a9baab899faad0c1f54e43b5e70ae672d92b014ff3615/pyevmasm-$pkgver.tar.gz")
+sha512sums=('4e442b325521f509bf3cb6c96d2fac77bab6e21b495fa50a769a48ee828bfff059a776da4ffcff9e43fb04e4dbb4ba880a6dd71341e6fc13937aecf2872f5b72')
+
+build() {
+  cd "pyevmasm-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "pyevmasm-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

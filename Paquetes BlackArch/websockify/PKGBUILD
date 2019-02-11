@@ -1,0 +1,34 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=websockify
+pkgver=804.f0bdb0a
+pkgrel=1
+pkgdesc='WebSocket to TCP proxy/bridge.'
+groups=('blackarch' 'blackarch-networking')
+license=('LGPL3')
+arch=('any')
+url='http://github.com/kanaka/websockify'
+depends=('python2')
+makedepends=('git' 'python2' 'python2-distribute')
+source=("git+https://github.com/kanaka/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  sed -i 's|env python$|env python2|' \
+    "$pkgdir/usr/lib/python2.7/site-packages/$pkgname/websocket.py"
+
+  sed -i 's|env python$|env python2|' \
+    "$pkgdir/usr/lib/python2.7/site-packages/$pkgname/websocketproxy.py"
+}
+

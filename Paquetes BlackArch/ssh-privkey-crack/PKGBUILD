@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ssh-privkey-crack
+pkgver=0.4
+pkgrel=2
+groups=('blackarch' 'blackarch-cracker')
+pkgdesc='A SSH private key cracker.'
+url='https://code.google.com/p/lusas/'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('custom:unknown')
+depends=('openssl')
+makedepends=('subversion')
+source=('svn+https://lusas.googlecode.com/svn')
+sha512sums=('SKIP')
+
+build() {
+  cd svn/trunk/ssh-key-crack
+
+  gcc -Wall $CFLAGS -lssl -lcrypto -o ssh-privkey-crack ssh-privkey-crack.c
+}
+
+package() {
+  cd svn/trunk/ssh-key-crack
+
+  install -Dm 755 ssh-privkey-crack "$pkgdir/usr/bin/$pkgname"
+}
+

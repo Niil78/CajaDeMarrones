@@ -1,0 +1,35 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=leroy-jenkins
+pkgver=3.bdc3965
+pkgrel=4
+groups=('blackarch' 'blackarch-exploitation')
+pkgdesc='A python tool that will allow remote execution of commands on a Jenkins server and its nodes.'
+url='https://github.com/captainhooligan/Leroy-Jenkins'
+arch=('any')
+license=('GPL3')
+depends=('python2' 'python2-pycurl' 'pygtk')
+makedepends=('git')
+source=('git+https://github.com/captainhooligan/Leroy-Jenkins.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Leroy-Jenkins
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd Leroy-Jenkins
+
+  sed -i 's/python/python2/' leroy-jenkins.py
+}
+
+package() {
+  cd Leroy-Jenkins
+
+  install -Dm 755 leroy-jenkins.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README"
+}
+

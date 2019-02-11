@@ -1,0 +1,58 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=wfuzz
+pkgver=654.bc67d05
+pkgrel=1
+groups=('blackarch' 'blackarch-fuzzer' 'blackarch-webapp')
+pkgdesc='Utility to bruteforce web applications to find their not linked resources.'
+url='https://github.com/xmendez/wfuzz'
+arch=('any')
+license=('GPL2')
+depends=('python2' 'python2-pysqlite-legacy' 'python2-lxml' 'python2-pyxml'
+         'python2-pycurl')
+makedepends=('git')
+source=('git+https://github.com/xmendez/wfuzz.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  _tools='wfencode wfuzz wfpayload wxfuzz'
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  rm LICENSE README.md setup.py
+
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  for t in $_tools
+  do
+    if [ "$t" = "wfuzz" ]
+    then
+      cat > "$pkgdir/usr/bin/$t" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python2 src/$t-cli.py "\$@"
+EOF
+    else
+      cat > "$pkgdir/usr/bin/$t" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python2 src/$t.py "\$@"
+EOF
+    fi
+    chmod +x "$pkgdir/usr/bin/$t"
+  done
+}
+

@@ -1,0 +1,62 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=mobsf
+pkgver=825.56ac28e
+pkgrel=1
+epoch=1
+groups=('blackarch' 'blackarch-mobile')
+pkgdesc='An intelligent, all-in-one open source mobile application (Android/iOS) automated pen-testing framework capable of performing static, dynamic analysis and web API testing.'
+arch=('any')
+url='https://github.com/MobSF/Mobile-Security-Framework-MobSF'
+license=('GPL3')
+depends=('python' 'python-django' 'python-pdfkit' 'androguard' 'wkhtmltopdf'
+         'python-lxml' 'python-rsa' 'python-biplist' 'python-requests'
+         'jre-openjdk' 'python-yara' 'sqlite' 'fontconfig' 'libjpeg-turbo'
+         'python-virtualenv' 'python-pytz' 'python-numpy' 'python-pyparsing'
+         'python-kiwisolver' 'python-six' 'python-dateutil' 'python-cycler'
+         'python-matplotlib' 'python-future' 'python-colorama' 'python-pygments'
+         'python-asn1crypto' 'python-parso' 'python-jedi' 'python-wcwidth'
+         'python-prompt_toolkit' 'python-decorator' 'python-traitlets'
+         'python-ptyprocess' 'python-pexpect' 'python-pickleshare' 'ipython'
+         'python-networkx' 'python-pyasn1' 'python-urllib3' 'python-idna'
+         'python-chardet' 'python-certifi' 'python-pycparser' 'python-cffi'
+         'python-brotlipy' 'python-pyperclip' 'python-blinker'
+         'python-cryptography' 'python-click' 'python-ldap3' 'mitmproxy'
+         'python-kaitaistruct' 'python-tornado' 'python-hyperframe'
+         'python-hpack' 'python-h2' 'python-h11' 'python-wsproto' 'python-urwid'
+         'python-ruamel-yaml' 'python-passlib' 'python-sortedcontainers'
+         'python-pyopenssl' 'capfuzz' 'python-traitlets')
+makedepends=('git' 'python-setuptools' 'python-pip')
+source=('git+https://github.com/MobSF/Mobile-Security-Framework-MobSF.git')
+sha512sums=('SKIP')
+install='mobsf.install'
+
+pkgver() {
+  cd Mobile-Security-Framework-MobSF
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd Mobile-Security-Framework-MobSF
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  rm README.* LICENSE
+
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/mobsf" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec bash run.sh
+EOF
+
+  chmod +x "$pkgdir/usr/bin/mobsf"
+}
+

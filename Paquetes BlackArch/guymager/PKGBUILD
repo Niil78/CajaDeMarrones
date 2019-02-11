@@ -1,0 +1,21 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=guymager
+pkgver=0.8.8
+pkgrel=1
+groups=('blackarch' 'blackarch-forensic')
+pkgdesc='A forensic imager for media acquisition.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://guymager.sourceforge.net/'
+license=('GPL')
+depends=('qt4')
+options=('!strip')
+_ar=amd64
+sha512sums=('91b539b6891b5c3b8965fd017d4d24f5166031bdc6cf82ba3777b457339187ce695fcfc80ce06ae8944dff22c1b1455e091fb5410572308f7c54dac22bd172cb')
+source=("http://deb.pinguin.lu/$_ar/guymager-beta_$pkgver-1_$_ar.deb")
+
+package() {
+  tar xfJ data.tar.xz -C "$pkgdir"
+}
+

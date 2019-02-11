@@ -1,0 +1,34 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=apache-tika
+pkgver=1.20
+pkgrel=1
+pkgdesc='Toolkit for detecting and extracting metadata and structured text content.'
+arch=('any')
+license=('Apache')
+url='https://tika.apache.org/'
+depends=('java-environment' 'bash')
+noextract=("tika-server-$pkgver.jar")
+source=("http://central.maven.org/maven2/org/apache/tika/tika-server/$pkgver/tika-server-$pkgver.jar"
+        'apache-tika.service')
+sha512sums=('a7ef35317aba76be8606f9250893efece8b93384e835a18399da18a095b19a15af591e3997828d4ebd3023f21d5efad62a91918610c44e692cfd9bed01d68382'
+            'e46522bfcc86ada8776c4f12cf645a81c34492b1c86e9bd1258d7fa248fb8fed9c2bd57e5971c5c9a4687f35626f872f63920649279cfaba5498a55c3331bcf5')
+
+package() {
+  install -dm 755 "$pkgdir/usr/bin"
+
+  install -Dm 755 "tika-server-$pkgver.jar" \
+    "$pkgdir/usr/share/java/apache-tika/tika-server-$pkgver.jar"
+  install -Dm 644 "apache-tika.service" \
+    "$pkgdir/usr/lib/systemd/system/apache-tika.service"
+
+  cat > "$pkgdir/usr/bin/tika" << EOF
+#!/bin/sh
+"$JAVA_HOME/bin/java" -jar \
+  "/usr/share/java/apache-tika/tika-server-$pkgver.jar" "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/tika"
+}
+

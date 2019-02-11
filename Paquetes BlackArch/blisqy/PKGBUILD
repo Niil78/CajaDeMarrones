@@ -1,0 +1,29 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=blisqy
+pkgver=15.0d73ed0
+pkgrel=1
+pkgdesc='Exploit Time-based blind-SQL injection in HTTP-Headers (MySQL/MariaDB).'
+groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation')
+arch=('any')
+url='https://github.com/JohnTroony/Blisqy'
+license=('custom:unknown')
+depends=('python')
+makedepends=('git')
+source=('git+https://github.com/JohnTroony/Blisqy.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Blisqy
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd Blisqy
+
+  install -Dm 755 blisqy.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+}
+

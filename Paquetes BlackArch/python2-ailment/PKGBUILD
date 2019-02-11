@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-ailment
+pkgver=8.19.2.4
+pkgrel=1
+pkgdesc='The angr intermediate language.'
+arch=('any')
+url='https://pypi.org/project/ailment/#files'
+license=('custom:unknown')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/0c/88/75db89b4ae94c096e933039c3cded4b60128f9326918b2f4a9941b487b8a/ailment-8.19.2.4.tar.gz")
+sha512sums=('73ced20b702e63f3899b04daf0d27a69d8a20215a99f6c259d2edef36f2c78d998093e001bd230d511c5565c8285bec3ea0f75a2e7df3a6872877b79d6dacb1b')
+
+build() {
+  cd "ailment-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "ailment-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

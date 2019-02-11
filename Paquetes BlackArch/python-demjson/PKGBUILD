@@ -1,0 +1,30 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-demjson
+pkgver=2.2.4
+pkgrel=4
+pkgdesc='Encoder, decoder, and lint/validator for JSON (JavaScript Object Notation) compliant with RFC 4627.'
+arch=('any')
+url='https://pypi.org/project/demjson/#files'
+license=('LGPL')
+depends=('python')
+makedepends=('python-setuptools')
+source=("http://deron.meranda.us/python/demjson/dist/demjson-$pkgver.tar.gz")
+sha512sums=('d8a1cde062d0b062bdae29b6d79ad69fb9cc185428718a0009ccbed544ed37bd354fbb86edadb56bd98183ac8636b2edae322ed19aa5f07a7b6df668c7aa0029')
+
+build() {
+  cd "demjson-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "demjson-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+
+  mv "$pkgdir/usr/bin/jsonlint" "$pkgdir/usr/bin/jsonlint3"
+}
+

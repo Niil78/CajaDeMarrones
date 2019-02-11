@@ -1,0 +1,38 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=thezoo
+pkgver=176.40e343f
+pkgrel=1
+groups=('blackarch-malware')
+pkgdesc='A project created to make the possibility of malware analysis open and available to the public.'
+url='https://github.com/ytisf/theZoo'
+arch=('any')
+license=('GPL3')
+depends=('python2')
+makedepends=('git')
+source=('git+https://github.com/ytisf/theZoo.git#branch=master')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd theZoo
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd theZoo
+
+  install -dm 755 "$pkgdir"/usr/{bin,share/thezoo}
+
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python2 ./theZoo.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+

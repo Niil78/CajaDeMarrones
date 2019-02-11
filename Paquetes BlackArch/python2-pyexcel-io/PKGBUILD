@@ -1,0 +1,34 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-pyexcel-io
+pkgver=0.5.12
+pkgrel=1
+pkgdesc='A python library to read and write structured data in csv, zipped csvformat and to/from databases.'
+arch=('any')
+url='https://pypi.org/project/pyexcel-io/#files'
+license=('BSD')
+depends=('python2' 'python2-lml')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/6e/48/1f79d572e9700ca4b942c85eef94cf0df082212e2ffe618ca967b1725708/pyexcel-io-0.5.12.tar.gz")
+sha512sums=('750f95c368500197df16132eafd0e0bca2b6a750e11ae7f66755e993afcd558c25dd7a06a5a4044624dd708ff4af787adfdd4fec1c55c95bdf85904c7870325c')
+
+build() {
+  cd "pyexcel-io-$pkgver"
+
+  python2 setup.py build
+}
+
+prepare() {
+  cd "pyexcel-io-$pkgver"
+
+  sed -i 's|lml==0.0.1|lml|g' setup.py
+}
+
+package() {
+  cd "pyexcel-io-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

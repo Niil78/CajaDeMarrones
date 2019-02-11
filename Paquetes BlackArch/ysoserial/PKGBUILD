@@ -1,0 +1,32 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ysoserial
+pkgver=0.0.5
+pkgrel=3
+groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation')
+pkgdesc='A proof-of-concept tool for generating payloads that exploit unsafe Java object deserialization.'
+arch=('any')
+url='https://github.com/frohoff/ysoserial'
+license=('MIT')
+depends=('java-environment')
+makedepends=('git')
+source=("https://github.com/frohoff/ysoserial/archive/$pkgver.tar.gz")
+source=("https://jitpack.io/com/github/frohoff/ysoserial/master-SNAPSHOT/ysoserial-master-SNAPSHOT.jar")
+noextract=("ysoserial-master-SNAPSHOT.jar")
+sha512sums=('53230027baa5a3fb4a1e8b499a25e3c446d953bd81dcb674728e6d0fb682ed0133a9ef9f7852f5d288f312abd56eebbcc16624b1f7f3db978d64c0e1c60b537e')
+
+package() {
+  install -dm 755 "$pkgdir/usr/bin/"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm644 ysoserial-master-SNAPSHOT.jar "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+exec java -jar /usr/share/$pkgname/$pkgname-master-SNAPSHOT.jar "\${@}"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+

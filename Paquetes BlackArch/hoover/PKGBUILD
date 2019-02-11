@@ -1,0 +1,29 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=hoover
+pkgver=4.9bda860
+pkgrel=2
+groups=('blackarch' 'blackarch-wireless' 'blackarch-sniffer')
+pkgdesc='Wireless Probe Requests Sniffer.'
+arch=('any')
+url='https://github.com/xme/hoover/'
+license=('custom:unknown')
+depends=('perl' 'perl-getopt-long' 'wireless_tools' 'wireshark-cli')
+makedepends=('git')
+source=('git+https://github.com/xme/hoover.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm 755 hoover.pl "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
+

@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-google-cloud-storage
+pkgver=1.14.0
+pkgrel=1
+pkgdesc='Google Cloud Storage API client library.'
+arch=('any')
+url='https://pypi.org/project/google-cloud-storage/#files'
+license=('Apache')
+depends=('python' 'python-google-cloud-core' 'python-google-resumable-media')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/54/25/17f11526d46ec27b0abb6dc2849ec4274163653b4e309a868494d8fa8ab5/google-cloud-storage-1.14.0.tar.gz")
+sha512sums=('97c4e74c80b616867cdfce4004d872a87ba138eeee02ed6ea11dd42344e464b66a61db4f807bf33ecfd649117413906768fa2bb49b37715229440f152011688f')
+
+build() {
+  cd "google-cloud-storage-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "google-cloud-storage-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

@@ -1,0 +1,33 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=wapiti
+pkgver=3.0.1
+pkgrel=3
+groups=('blackarch' 'blackarch-fuzzer' 'blackarch-scanner' 'blackarch-webapp')
+pkgdesc='A vulnerability scanner for web applications. It currently search vulnerabilities like XSS, SQL and XPath injections, file inclusions, command execution, LDAP injections, CRLF injections...'
+url='http://wapiti.sourceforge.net/'
+license=('GPL')
+depends=('python' 'python-requests' 'python-setuptools' 'python-beautifulsoup4'
+         'python-argparse' 'python-tld' 'python-yaswfp' 'python-mako'
+         'python-pysocks')
+makedepends=('python-setuptools')
+arch=('any')
+source=("https://sourceforge.net/projects/wapiti/files/wapiti/wapiti-$pkgver/wapiti3-$pkgver.tar.gz/download")
+sha512sums=('596df444d19cc2b98dd88f033c66ac65bcc8ab6e34508c1fa201503d2e61ca053ecddaa7a0814329c87e1e10c013306dd7dd4b56e644d4b5dab5924d75c6f4d7')
+
+build() {
+  cd "wapiti3-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "wapiti3-$pkgver"
+
+  python setup.py install --root="$pkgdir"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md INSTALL.md \
+    VERSION doc/AUTHORS doc/ChangeLog*
+}
+

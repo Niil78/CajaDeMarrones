@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-python-i18n
+pkgver=0.3.5
+pkgrel=3
+pkgdesc='Translation library for Python.'
+arch=('any')
+url='https://pypi.org/project/python-i18n/'
+license=('MIT')
+depends=('python2' 'python2-yaml')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/5d/2e/1fdc2d247f9366e0ca7e2f84471b22952348ba39fc8a6f6ce12217d2adbd/python-i18n-$pkgver.tar.gz")
+sha512sums=('8c8e16b067ddf63713ae39a2148d80cd41e2421668fa581d0d1d335af0f128e6a3bf31e15ca88da8643de85e2ab46731a4a31db93b9987de48fce3cebc200992')
+
+build() {
+  cd "python-i18n-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "python-i18n-$pkgver"
+
+ python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

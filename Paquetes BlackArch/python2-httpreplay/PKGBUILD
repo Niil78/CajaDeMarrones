@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-httpreplay
+pkgver=0.2.4
+pkgrel=2
+pkgdesc='Properly interpret, decrypt, and replay pcap files.'
+arch=('any')
+url='https://pypi.org/project/HTTPReplay/#files'
+depends=('python2')
+makedepends=('python2-setuptools')
+license=('GPL3')
+source=("https://files.pythonhosted.org/packages/da/53/56d4f56bf2b476be6c1935b8d0b24c32332da31944aea4784e587a7e4a46/HTTPReplay-$pkgver.tar.gz")
+sha512sums=('037d4983f2d57fe50fe4ee6320798b30a81dbd413bfacb4b3c760117b419564af6c77263f48f048102eef59311c20453013c32c6c3fb40d55be07b7535777f1d')
+
+build() {
+  cd "HTTPReplay-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "HTTPReplay-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

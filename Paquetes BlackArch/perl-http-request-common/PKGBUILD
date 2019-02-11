@@ -1,0 +1,40 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=perl-http-request-common
+pkgver=6.18
+pkgrel=1
+pkgdesc='Construct common HTTP::Request objects'
+arch=('any')
+license=('PerlArtistic' 'GPL')
+options=('!emptydirs')
+url='http://search.cpan.org/~gaas/HTTP-Message-6.06/lib/HTTP/Request/Common.pm'
+source=("http://search.cpan.org/CPAN/authors/id/O/OA/OALDERS/HTTP-Message-$pkgver.tar.gz")
+sha512sums=('46a5d4ee6af1bdb7b320ae8ad430b4dbff9a198a60d025703fa64a83284dfe6bee08041fc43372b6ea724ab973f84c3cbca5353d6158bdfbbed612577de61206')
+
+prepare() {
+  cd "HTTP-Message-$pkgver"
+
+  export PERL_MM_USE_DEFAULT=1 PERL5LIB="" \
+    PERL_AUTOINSTALL=--skipdeps \
+    PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR='$pkgdir'" \
+    PERL_MB_OPT="--installdirs vendor --destdir '$pkgdir'" \
+    MODULEBUILDRC=/dev/null
+
+  /usr/bin/perl Makefile.PL
+}
+
+build() {
+  cd "HTTP-Message-$pkgver"
+
+  make
+}
+
+package() {
+  cd "HTTP-Message-$pkgver"
+
+  make install
+
+  find "$pkgdir" -name .packlist -o -name perllocal.pod -delete
+}
+

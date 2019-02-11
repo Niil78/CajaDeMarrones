@@ -1,0 +1,40 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=sniff-probe-req
+pkgver=152.7e486ed
+pkgrel=1
+pkgdesc='Wi-Fi Probe Requests Sniffer.'
+groups=('blackarch' 'blackarch-wireless' 'blackarch-sniffer')
+arch=('any')
+url='https://github.com/SkypLabs/sniff-probe-req'
+license=('GPL3')
+depends=('python' 'python-argparse' 'python-netaddr' 'python-scapy')
+makedepends=('git' 'python-setuptools')
+source=('git+https://github.com/SkypLabs/sniff-probe-req.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  python3 setup.py build
+}
+
+package() {
+  cd $pkgname
+
+  python3 setup.py install --root="$pkgdir" --prefix=/usr --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst docs/*.rst
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  rm -f "$pkgdir/usr/lib/python3.7/site-packages/test/__init__.py"
+  rm -f "$pkgdir/usr/lib/python3.7/site-packages/test/__pycache__/__init__.cpython-37.pyc"
+}
+

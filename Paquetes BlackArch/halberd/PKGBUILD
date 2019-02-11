@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=halberd
+pkgver=0.2.4
+pkgrel=2
+groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp')
+pkgdesc='Halberd discovers HTTP load balancers. It is useful for web application security auditing and for load balancer configuration testing.'
+url='http://halberd.superadditive.com/'
+arch=('any')
+license=('GPL')
+depends=('python2')
+source=("http://halberd.superadditive.com/dist/halberd-$pkgver.tar.gz")
+sha512sums=('84f924e0b1c3f656b2625abb0618f3eeb5c1533f')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root=$pkgdir --optimize=1 \
+    --skip-build
+}
+

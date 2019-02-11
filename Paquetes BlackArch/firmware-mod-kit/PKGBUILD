@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=firmware-mod-kit
+pkgver=099
+pkgrel=6
+groups=('blackarch' 'blackarch-firmware')
+pkgdesc='Modify firmware images without recompiling.'
+url='http://code.google.com/p/firmware-mod-kit'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('MIT')
+depends=('python-magic')
+source=("http://firmware-mod-kit.googlecode.com/files/fmk_$pkgver.tar.gz")
+sha512sums=('3d9aba969bdd88bf32940b9879b9e714ea7d2147')
+
+build(){
+  cd fmk/src
+
+  ./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd fmk
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  install -m 755 *.sh "$pkgdir/usr/share/$pkgname/"
+  install -m 644 *.inc "$pkgdir/usr/share/$pkgname/"
+  install -m 644 *.htm "$pkgdir/usr/share/doc/$pkgname/"
+  install -m 644 firmware_mod_kit_version.txt "$pkgdir/usr/share/$pkgname/"
+
+  cp -a --no-preserve=ownership src ipk_template "$pkgdir/usr/share/$pkgname/"
+}
+

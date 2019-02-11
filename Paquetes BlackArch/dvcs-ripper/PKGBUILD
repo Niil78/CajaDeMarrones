@@ -1,0 +1,32 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=dvcs-ripper
+pkgver=52.0672a34
+pkgrel=1
+groups=('blackarch' 'blackarch-scanner')
+pkgdesc='Rip web accessible (distributed) version control systems: SVN/GIT/...'
+arch=('any')
+url='https://github.com/kost/dvcs-ripper'
+license=('GPL2')
+depends=('perl' 'perl-lwp-protocol-https' 'perl-dbi' 'perl-getopt-long')
+makedepends=('git')
+source=('git+https://github.com/kost/dvcs-ripper.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm 755 rip-git.pl "$pkgdir/usr/bin/rip-git"
+  install -Dm 755 rip-svn.pl "$pkgdir/usr/bin/rip-svn"
+  install -Dm 755 rip-cvs.pl "$pkgdir/usr/bin/rip-cvs"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

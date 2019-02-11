@@ -1,0 +1,69 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=responder
+pkgver=201.0bdc183
+pkgrel=2
+epoch=2
+pkgdesc='A LLMNR and NBT-NS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server supporting NTLMv1/NTLMv2/LMv2, Extended Security NTLMSSP and Basic HTTP authentication.'
+groups=('blackarch' 'blackarch-scanner' 'blackarch-fuzzer' 'blackarch-spoof'
+        'blackarch-networking')
+arch=('any')
+depends=('python2')
+makedepends=('git')
+url='https://github.com/SpiderLabs/Responder/'
+license=('GPL3')
+source=('git+https://github.com/SpiderLabs/Responder.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Responder
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd Responder
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md
+
+  rm README.md
+
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python2 Responder.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+
+  cat > "$pkgdir/usr/bin/$pkgname-dhcp" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname/tools
+exec python2 DHCP.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname-dhcp"
+
+  cat > "$pkgdir/usr/bin/$pkgname-smbrelay" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname/tools
+exec python2 SMBRelay.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname-smbrelay"
+
+  cat > "$pkgdir/usr/bin/$pkgname-icmp-redirect" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname/tools
+exec python2 Icmp-Redirect.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname-icmp-redirect"
+}
+

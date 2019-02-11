@@ -1,0 +1,42 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=detect-it-easy
+pkgver=63.bc70495
+pkgrel=1
+groups=('blackarch' 'blackarch-binary' 'blackarch-reversing')
+pkgdesc='A program for determining types of files.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/horsicq/Detect-It-Easy'
+license=('unknown')
+depends=('qt4')
+makedepends=('git' 'qt4')
+source=('git+https://github.com/horsicq/DIE-engine.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd DIE-engine
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd DIE-engine
+
+  sed -i 's|/home/hors/QT/4.8.6/bin/qmake|/usr/bin/qmake-qt4|' \
+    build_console_lin.sh
+}
+
+build() {
+  cd DIE-engine
+
+  bash build_console_lin.sh
+}
+
+package() {
+  cd DIE-engine
+
+  install -Dm 755 DIEC_lin64 "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README"
+}
+

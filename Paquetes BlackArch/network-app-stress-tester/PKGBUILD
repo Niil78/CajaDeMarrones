@@ -1,0 +1,35 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=network-app-stress-tester
+pkgver=19.df75391
+pkgrel=1
+groups=('blackarch' 'blackarch-dos' 'blackarch-networking' 'blackarch-fuzzer')
+pkgdesc='Network Application Stress Testing Yammer.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/PherricOxide/Network-App-Stress-Tester'
+license=('GPL3')
+depends=('')
+makedepends=('git')
+source=('git+https://github.com/PherricOxide/Network-App-Stress-Tester.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Network-App-Stress-Tester
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd Network-App-Stress-Tester/src
+
+  g++ fast.c -o network-app-stress-tester
+}
+
+package() {
+  cd Network-App-Stress-Tester
+
+  install -Dm 755 src/network-app-stress-tester "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README"
+}
+

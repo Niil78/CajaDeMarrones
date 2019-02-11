@@ -1,0 +1,31 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ruby-json
+pkgver=2.1.0
+pkgrel=3
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+pkgdesc='JSON implementation as a Ruby extension in C'
+url='http://rubygems.org/gems/json'
+license=('GPL')
+depends=('ruby')
+makedepends=('rubygems' 'ruby-rdoc')
+optdepends=('jruby' 'java-environment')
+source=("https://rubygems.org/gems/json-$pkgver.gem")
+noextract=("json-$pkgver.gem")
+sha512sums=('bffbe462e952bca321d4325ecb9c5e9f61e51cad13758581ecfaa6a038bac4e30dc7db50bd897086a5592f6fc437d0e0909f91e279aaf4dd71cf127100c3550b')
+
+package() {
+  _gemdir=$(ruby -e 'puts Gem.default_dir')
+
+  if [[ $CARCH == arm* ]] ; then
+    gem install --no-user-install --ignore-dependencies --no-rdoc --no-ri \
+      -i "$pkgdir$_gemdir" json-$pkgver.gem
+  else
+    gem install --no-user-install --ignore-dependencies -i "$pkgdir$_gemdir" \
+      json-$pkgver.gem
+  fi
+
+  find "$pkgdir" -depth -type f -name "Makefile*" -exec rm  \;
+}
+

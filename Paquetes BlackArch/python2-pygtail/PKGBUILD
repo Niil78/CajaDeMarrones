@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-pygtail
+pkgver=0.10.0
+pkgrel=2
+pkgdesc='Reads log file lines that have not been read.'
+arch=('any')
+url='https://pypi.org/project/pygtail/#files'
+license=('GPL2')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/67/af/ec001d13970f67ddd97f39eeb7389984e2f601afce133a125514340f7af8/pygtail-$pkgver.tar.gz")
+sha512sums=('5953a206f86a4bbe8bd864916504ea3d04f1c5f5ab85c13cbee300b7b25207837d6b3b1e687eec59616b0f941784ac2e43b15dbffcf3410882ac4e4a63ee7672')
+
+build() {
+  cd "pygtail-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "pygtail-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

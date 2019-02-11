@@ -1,0 +1,45 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-scikit-image
+pkgver=0.14.2
+pkgrel=1
+pkgdesc='Image processing routines for SciPy.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://pypi.org/project/scikit-image/#files'
+license=('BSD')
+depends=('python2-scipy' 'python2-matplotlib' 'python2-networkx'
+         'python2-pillow' 'python2-pywavelets' 'python2-six'
+         'python2-cloudpickle')
+makedepends=('cython2')
+optdepends=('python2-pyqt4: for imshow(x, fancy=True) and skivi'
+            'freeimage: for reading various types of image file formats')
+options=('!emptydirs')
+source=("https://files.pythonhosted.org/packages/7f/bd/74ed9add17c3c7529c18693c17846753649c6cf2e674e7482fbf85d636cb/scikit-image-$pkgver.tar.gz")
+sha512sums=('ab31fdb5b1d16b794ccc4d673f6c8bce0a8a54b81c0e43c9a4cdd5eb0465ef69ac184a06e395a1d27da51c2e0911db9afa2be4e740f44bceab952428eb7f599a')
+
+prepare() {
+  cd "scikit-image-$pkgver"
+
+  sed -e "s|#![ ]*/usr/bin/python$|#!/usr/bin/python2|" \
+    -e "s|#![ ]*/usr/bin/env python$|#!/usr/bin/env python2|" \
+    -e "s|#![ ]*/bin/env python$|#!/usr/bin/env python2|" \
+    -i $(find . -name '*.py')
+}
+
+build() {
+  cd "scikit-image-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "scikit-image-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+
+  mv "$pkgdir/usr/bin/skivi" "$pkgdir/usr/bin/skivi2"
+}
+
+

@@ -1,0 +1,55 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=suricata
+pkgver=4.1.2
+pkgrel=1
+pkgdesc='An Open Source Next Generation Intrusion Detection and Prevention Engine.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://suricata-ids.org/'
+groups=('blackarch' 'blackarch-defensive' 'blackarch-ids')
+license=('GPL2')
+depends=('zlib' 'nss' 'jansson' 'libcap-ng' 'libnetfilter_queue' 'libnfnetlink'
+         'libnet' 'libpcap' 'libyaml' 'pcre' 'python2-magic' 'file' 'lua'
+         'luajit' 'geoip' 'libnetfilter_log')
+optdepends=('snort: suricata can use rulesets provided by snort')
+backup=('etc/suricata/suricata.yaml')
+source=("http://openinfosecfoundation.org/download/suricata-$pkgver.tar.gz")
+sha512sums=('08d7746ede0de5af877befbbc6c70097c918bb9a6dda45a23b8e1bb2c61b47b0b368366ed15e5d222b748a56c6f4e5bacbed034964bf1e79043a083e0ddb4d16')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+
+  find "$srcdir" -type f -name '*.py' -exec \
+    sed -i 's|#!/usr/bin/env python|#!/usr/bin/env python2|' {} +
+  find "$srcdir" -type f -name '*.py' -exec \
+    sed -i 's|#!/usr/bin/python|#!/usr/bin/python2|' {} +
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
+    HAVE_PYTHON_CONFIG=/usr/bin/python2 --enable-gccprotect \
+    --enable-nfqueue --enable-nflog --enable-luajit --enable-geoip \
+    --disable-coccinelle --enable-old-barnyard2 --with-pic \
+    --enable-python
+
+  make
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -dm 755 "$pkgdir/var/log/$pkgname"
+  install -dm 755 "$pkgdir/etc/$pkgname/rules"
+
+  make DESTDIR="$pkgdir" install
+
+  install -Dm 644 suricata.yaml "$pkgdir/etc/$pkgname/suricata.yaml"
+  install -Dm 644 classification.config \
+    "$pkgdir/etc/$pkgname/classification.config"
+  install -Dm 644 reference.config "$pkgdir/etc/$pkgname/reference.config"
+  install -Dm 644 rules/*.rules "$pkgdir/etc/$pkgname/rules/"
+}
+

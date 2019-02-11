@@ -1,0 +1,54 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgbase=shodan
+pkgname=('shodan' 'python-shodan' 'python2-shodan')
+pkgver=1.10.4
+pkgrel=5
+pkgdesc='Python library and command-line utility for Shodan (https://developer.shodan.io).'
+url='https://pypi.org/project/shodan/#files'
+groups=('blackarch' 'blackarch-automation')
+makedepends=('python-setuptools' 'python2-setuptools')
+license=('MIT')
+arch=('any')
+source=("https://files.pythonhosted.org/packages/24/36/87e5e4cab32ffeba1c7304f7dadc00b93491bc3b3de0b599ccacfa3b3671/shodan-$pkgver.tar.gz")
+sha512sums=('3413ec1fe210e8fba6f6ac2a86ab22b7149363e65687d4bd7ec698df3f63b987d5db731a25feea28f57ddc6ab85dfdb1ffb9b74428b4209ddd482a4be231ae29')
+
+build_python-shodan() {
+  cd "$pkgbase-$pkgver"
+
+  python setup.py build
+
+  cd "${pkgbase}2-$pkgver"
+
+  python2 setup.py build
+}
+
+package_shodan() {
+  a=1337
+}
+
+package_python-shodan() {
+  depends=('python' 'python-requests' 'python-simplejson' 'python-click'
+           'python-click-plugins' 'python-xls-writer')
+
+  cd "$pkgbase-$pkgver"
+
+  python setup.py install --root="$pkgdir" --optimize=1
+
+  install -dm 644 license "$pkgdir/usr/share/licenses/$pkgbase/license"
+}
+
+package_python2-shodan() {
+  depends=('python2' 'python2-requests' 'python2-simplejson' 'python2-click'
+           'python2-click-plugins')
+
+  cd "$pkgbase-$pkgver"
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  install -dm 644 license "$pkgdir/usr/share/licenses/$pkgbase/license"
+
+  mv "$pkgdir/usr/bin/shodan" "$pkgdir/usr/bin/shodan2"
+}
+

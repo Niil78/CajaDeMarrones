@@ -1,0 +1,21 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=blackarch-mirrorlist
+pkgver=20181130
+pkgrel=1
+pkgdesc='BlackArch Linux mirror list file.'
+groups=('blackarch')
+arch=('any')
+url='https://www.blackarch.org/blackarch-mirrorlist'
+license=('custom:unknown')
+depends=('pacman')
+backup=('etc/pacman.d/blackarch-mirrorlist')
+source=('https://www.blackarch.org/blackarch-mirrorlist')
+sha512sums=('7050960037e8a6fdb99e6a06ae4277810dfd48823e83826287c89e62e63dc2c81a9068b1ecb6a583b031d0c02d034ca04eefb899b6e6e0d69bd7eae4f95fad11')
+options=('!strip')
+
+package() {
+  install -Dm 644 -t "$pkgdir/etc/pacman.d/" blackarch-mirrorlist
+}
+

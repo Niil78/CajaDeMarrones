@@ -1,0 +1,44 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=chisel
+pkgver=91.ee6601a
+pkgrel=1
+pkgdesc='A fast TCP tunnel over HTTP.'
+groups=('blackarch' 'blackarch-tunnel')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/jpillora/chisel'
+license=('MIT')
+makedepends=('go' 'git')
+source=('git+https://github.com/jpillora/chisel.git')
+sha512sums=('SKIP')
+_url='github.com/jpillora/chisel'
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  export GOPATH="$srcdir"
+
+  go get -d -u $_url
+}
+
+build() {
+  cd $pkgname
+
+  export GOPATH="$srcdir"
+
+  go build
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm 755 chisel "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 example/users.json \
+    "$pkgdir/usr/share/doc/$pkgname/examples/users.json"
+}
+

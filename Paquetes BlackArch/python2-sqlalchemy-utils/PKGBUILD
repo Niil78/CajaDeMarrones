@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-sqlalchemy-utils
+pkgver=0.33.11
+pkgrel=1
+pkgdesc='Various utility functions for SQLAlchemy.'
+arch=('any')
+url='https://pypi.org/project/SQLAlchemy-Utils/#files'
+license=('BSD')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/fe/8b/a68f81076e9a2729675253228f43986914f0510078c86f14f6cd51dd3f01/SQLAlchemy-Utils-$pkgver.tar.gz")
+sha512sums=('a1c37a5f63d8840e543b469f2943e6f7c52aeabbba12965af8b7c9a1eda619765b9777609c7346ed59cbda7ed9dcec4557354683f51a2b886f1ed758e304521d')
+
+build() {
+  cd "SQLAlchemy-Utils-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "SQLAlchemy-Utils-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

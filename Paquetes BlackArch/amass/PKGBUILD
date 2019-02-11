@@ -1,0 +1,56 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=amass
+pkgver=332.18d4be1
+pkgrel=1
+epoch=2
+pkgdesc='In-depth subdomain enumeration written in Go.'
+arch=('any')
+groups=('blackarch' 'blackarch-scanner' 'blackarch-recon')
+url='https://github.com/OWASP/Amass'
+license=('Apache2')
+makedepends=('go' 'git')
+source=('git+https://github.com/OWASP/Amass.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Amass
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  mkdir -p "gopath/src/github.com/OWASP"
+  ln -rTsf Amass "gopath/src/github.com/OWASP/Amass"
+
+  export GOPATH="$srcdir/gopath"
+  cd "$GOPATH/src/github.com/OWASP/Amass"
+
+  go get -d ./...
+}
+
+build() {
+  export GOPATH="$srcdir/gopath"
+  cd "$GOPATH/src/github.com/OWASP/Amass"
+
+  go install -v ./...
+}
+
+package() {
+  export GOPATH="$srcdir/gopath"
+  cd "$GOPATH/bin"
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 755 "$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 755 "$pkgname.netdomains" "$pkgdir/usr/bin/$pkgname.netdomains"
+  install -Dm 755 "$pkgname.viz" "$pkgdir/usr/bin/$pkgname.viz"
+  install -Dm 755 "$pkgname.db" "$pkgdir/usr/bin/$pkgname.db"
+
+  cp -a --no-preserve=ownership "$GOPATH/src/github.com/OWASP/Amass/"{wordlists/,examples/,snapcraft.yaml} \
+    "$pkgdir/usr/share/$pkgname"
+
+  chmod 644 "$pkgdir/usr/share/$pkgname/"{wordlists/*,examples/*}
+}
+

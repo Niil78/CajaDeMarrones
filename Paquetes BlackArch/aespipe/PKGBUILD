@@ -1,0 +1,31 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=aespipe
+pkgver=2.4e
+pkgrel=1
+groups=('blackarch' 'blackarch-crypto')
+pkgdesc='Reads data from stdin and outputs encrypted or decrypted results to stdout.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://loop-aes.sourceforge.net/aespipe/'
+license=('GPL')
+source=("http://loop-aes.sourceforge.net/$pkgname/$pkgname-v$pkgver.tar.bz2")
+sha512sums=('e038f710ac971e5ba740648c0f255e8bc9fcea9be1a6b76208a453f21f013e1662c006d4f4495fa2b2560fd9b0c236947462a9b337a120073c6a5335b29f077e')
+
+build() {
+  cd "$pkgname-v$pkgver"
+
+  ./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd "$pkgname-v$pkgver"
+
+  make install DESTDIR="$pkgdir"
+
+  install -Dm 644 ChangeLog "$pkgdir/usr/share/doc/$pkgname/ChangeLog"
+  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README"
+}
+

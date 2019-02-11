@@ -1,0 +1,47 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=grr
+pkgver=20.9546b16
+pkgrel=1
+pkgdesc='High-throughput fuzzer and emulator of DECREE binaries.'
+groups=('blackarch' 'blackarch-fuzzer')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/trailofbits/grr'
+license=('Apache2')
+depends=('gflags')
+makedepends=('git' 'clang')
+source=('git+https://github.com/trailofbits/grr.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i 's|clang-3.8|clang|' Makefile
+  sed -i 's|clang++-3.8|clang++|' Makefile
+}
+
+build() {
+  cd $pkgname
+
+  make all
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/bin"
+
+  install -Dm 755 -t "$pkgdir/usr/bin" \
+    bin/debug_decree_user/{grrcov,grrplay,grrshot}
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" *.png
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

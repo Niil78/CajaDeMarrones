@@ -1,0 +1,38 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=exrex
+pkgver=132.6973340
+pkgrel=1
+pkgdesc='Irregular methods on regular expressions.'
+groups=('blackarch' 'blackarch-misc')
+arch=('any')
+url='https://github.com/asciimoo/exrex'
+license=('custom:unknown')
+depends=('python2')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/asciimoo/exrex.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  python2 setup.py build
+}
+
+package() {
+  cd $pkgname
+
+  python2 setup.py install --root="$pkgdir" --skip-build
+
+  mv "$pkgdir/usr/bin/exrex.py" "$pkgdir/usr/bin/$pkgname"
+
+  install -Dm 644 README.markdown "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
+

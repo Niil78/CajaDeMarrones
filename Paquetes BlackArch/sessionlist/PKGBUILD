@@ -1,0 +1,30 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=sessionlist
+pkgver=1.0
+pkgrel=2
+groups=('blackarch' 'blackarch-networking' 'blackarch-sniffer')
+pkgdesc='Sniffer that intents to sniff HTTP packets and attempts to reconstruct interesting authentication data from websites that do not employ proper secure cookie auth.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://www.0xrage.com/'
+license=('GPL3')
+depends=('libpcap' 'ncurses')
+makedepends=('git')
+source=('git+https://github.com/iamrage/sessionlist.git')
+sha512sums=('SKIP')
+
+build() {
+  cd $pkgname
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm 755 sessionlist "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README "$pkgdir/usr/share/$pkgname/README"
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}
+

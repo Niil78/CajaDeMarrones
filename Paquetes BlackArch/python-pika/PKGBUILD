@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-pika
+pkgver=0.13.0
+pkgrel=1
+pkgdesc='Pika Python AMQP Client Library.'
+arch=('any')
+url='https://pypi.org/project/pika/#files'
+license=('BSD')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/28/a8/d992bba5423c544cc4e4dbe0e55d9088d5e195513f0501fdeb3a0fa5736b/pika-$pkgver.tar.gz")
+sha512sums=('f555142c8f466ebdbc46a24278794754186176832841723cb0d5d6ff69ee9a946dca8a7ae3280a96b5da8cb2d3066e11a58771583edecf7990749c8857a7ed42')
+
+build() {
+  cd "pika-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "pika-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

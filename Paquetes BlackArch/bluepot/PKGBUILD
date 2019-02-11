@@ -1,0 +1,32 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=bluepot
+pkgver=0.1
+pkgrel=4
+groups=('blackarch' 'blackarch-bluetooth' 'blackarch-honeypot')
+pkgdesc="A Bluetooth Honeypot written in Java, it runs on Linux"
+arch=('any')
+url="https://code.google.com/p/bluepot/"
+license=('GPL3')
+depends=('java-environment')
+source=("https://bluepot.googlecode.com/files/bluepot-$pkgver.tar.gz")
+sha512sums=('3bff67a83987829e740c6f015c39d03216e293fe')
+
+prepare() {
+  cd $pkgname
+
+  sed -i 's|BluePot.jar|/usr/share/bluepot/BluePot-0.1.jar|' run.sh
+
+  find . -name '.svn' -type d -exec rm -rf {} +
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 755 run.sh "$pkgdir/usr/bin/$pkgname"
+  cp -a * "$pkgdir/usr/share/$pkgname"
+}
+

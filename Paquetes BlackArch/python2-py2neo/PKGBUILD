@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-py2neo
+pkgver=4.2.0
+pkgrel=1
+pkgdesc='Python client library and toolkit for Neo4j.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://pypi.python.org/pypi/py2neo/'
+license=('Apache')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/09/a7/e953ceef9a0e3c007139938b12f4827a248a20f02a0f28f98c6e108a4a93/py2neo-4.2.0.tar.gz")
+sha512sums=('ff61136816c7bf81162f8c56dbec0e38a6550dd2ffa12e43f548aaaed8d4462df4d8c53aace77ac0a6749b1ea9480422073b8136fc0006b5627275db98736dd0')
+
+build() {
+  cd "py2neo-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "py2neo-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

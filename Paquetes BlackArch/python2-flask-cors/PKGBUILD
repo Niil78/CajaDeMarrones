@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-flask-cors
+pkgver=3.0.7
+pkgrel=2
+pkgdesc='A Flask extension adding a decorator for CORS support.'
+arch=('any')
+url='https://pypi.org/project/Flask-Cors/#files'
+license=('MIT')
+depends=('python2-flask')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/45/b4/1810eb0c69d8432417dd25e3dd581bf0619d5c4f1b0c9f529f392d4aed31/Flask-Cors-$pkgver.tar.gz")
+sha512sums=('6bf8e45234e361641f4c920ed6cf240a833cd195daaf29dfc307e9b2007514bdd14ab1a96cc87afc5ff166484adcc4c6bf3ca7cb0c18f14a12f30c84f5efe6f6')
+
+build() {
+  cd "Flask-Core-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "Flask-Cors-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

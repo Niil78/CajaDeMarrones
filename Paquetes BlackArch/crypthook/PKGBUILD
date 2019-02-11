@@ -1,0 +1,35 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=crypthook
+pkgver=17.0728cd1
+pkgrel=1
+groups=('blackarch' 'blackarch-crypto' 'blackarch-tunnel' 'blackarch-networking')
+pkgdesc='TCP/UDP symmetric encryption tunnel wrapper.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/chokepoint/CryptHook'
+license=('custom:unknown')
+depends=('openssl')
+makedepends=('git')
+source=('git+https://github.com/chokepoint/CryptHook.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd CryptHook
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd CryptHook
+
+  make
+}
+
+package() {
+  cd CryptHook
+
+  install -Dm 755 crypthook.so "$pkgdir/usr/share/$pkgname/crypthook.so"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
+

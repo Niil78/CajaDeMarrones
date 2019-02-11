@@ -1,0 +1,35 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-pyexcel
+pkgver=0.5.10
+pkgrel=1
+pkgdesc='A wrapper library that provides one API to read, manipulate and writedata in different excel formats.'
+arch=('any')
+url='https://pypi.org/project/pyexcel/#files'
+license=('BSD')
+depends=('python2' 'python2-texttable' 'python2-lml' 'python2-pyexcel-io'
+         'python2-lxml')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/ef/ae/7e644caf6fad7e80e369f26d6ee5f8a6bc29c9c3591e3b40b498fd06b201/pyexcel-$pkgver.tar.gz")
+sha512sums=('65e4d34d76922c110eb802d98a1f1b5bc47d58e8f3bf35534c0976f49c8db778f3f51c0b9b4a00e4e629f972732a04f7b61c5fd5d011d830a0165ac553870b65')
+
+build() {
+  cd "pyexcel-$pkgver"
+
+  python2 setup.py build
+}
+
+prepare() {
+  cd "pyexcel-$pkgver"
+
+  sed -i 's|lml==0.0.1|lml|g' setup.py
+}
+
+package() {
+  cd "pyexcel-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

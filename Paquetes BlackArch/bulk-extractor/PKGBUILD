@@ -1,0 +1,43 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=bulk-extractor
+pkgver=1.5.5
+pkgrel=3
+groups=('blackarch' 'blackarch-forensic' 'blackarch-misc')
+pkgdesc='Bulk Email and URL extraction tool.'
+arch=('x86_64')
+url='https://github.com/simsong/bulk_extractor'
+license=('GPL')
+depends=('tre' 'java-environment' 'openssl' 'exiv2' 'afflib' 'libewf'
+         'ncurses5-compat-libs')
+source=("http://digitalcorpora.org/downloads/bulk_extractor/bulk_extractor-$pkgver.tar.gz")
+sha512sums=('9f1384f9d3b499beecc858f78e0abd4c904dad0c64ea04bf98c1a0195b62b17be19ed2bb7b104a3c65545988c6ec729d83f75673e27690585f18b5eb468a083a')
+
+prepare() {
+  cd "bulk_extractor-$pkgver"
+
+  sed -i 's|`dirname $0`|/usr/share/bulk-extractor|' java_gui/BEViewer
+}
+
+build() {
+  cd "bulk_extractor-$pkgver"
+
+  ./configure --prefix=/usr --sysconfdir=/etc
+
+  make
+
+  make -C java_gui
+}
+
+package() {
+  cd "bulk_extractor-$pkgver"
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  make DESTDIR="$pkgdir" install
+
+  install -m 644 java_gui/BEViewer.jar "$pkgdir/usr/share/$pkgname"
+  install -m 755 java_gui/BEViewer "$pkgdir/usr/bin"
+}
+

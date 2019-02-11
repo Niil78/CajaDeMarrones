@@ -1,0 +1,42 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=onionscan
+pkgver=130.da42865
+pkgrel=1
+groups=('blackarch' 'blackarch-scanner' 'blackarch-defensive')
+pkgdesc='Scan Onion Services for Security Issues.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/s-rah/onionscan'
+license=('MIT')
+depends=('glibc' 'go' 'libexif')
+makedepends=('go-pie' 'git')
+source=('git+https://github.com/s-rah/onionscan.git')
+sha512sums=('SKIP')
+_url='github.com/s-rah/onionscan'
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  install -dm 755 src/$_url && rm -rf src/$_url && mv onionscan src/$_url &&
+    cd src/$_url
+
+  GOPATH="$srcdir" go get -d -t $_url
+}
+
+package() {
+  install -dm 755 "$pkgdir/usr/bin"
+
+  GOPATH="$srcdir" go build -v $_url
+
+  install -Dm 755 "$srcdir/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 src/$_url/README.md \
+    "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 src/$_url/LICENSE \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

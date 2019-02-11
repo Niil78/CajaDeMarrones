@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-pymisp
+pkgver=2.4.102
+pkgrel=1
+pkgdesc='Python API for MISP.'
+arch=('any')
+url='https://pypi.org/project/pymisp/#files'
+license=('BSD')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/27/79/177653e0990491251beabd19ec46ca83a837c527b9afa9e462bddfe67f4f/pymisp-2.4.102.tar.gz")
+sha512sums=('ecfb5abfae34143634423cef15f58da84a8e2a338b09bd6b1aeb8561b2e70c7237bf9c4016b8aded23d2dbb76da4d8e43a3e554fdcb013c4aa27174f6fab18bf')
+
+build() {
+  cd "pymisp-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "pymisp-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

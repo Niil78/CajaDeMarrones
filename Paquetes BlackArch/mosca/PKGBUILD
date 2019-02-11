@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=mosca
+pkgver=112.7d33611
+pkgrel=1
+groups=('blackarch' 'blackarch-code-audit')
+pkgdesc='Static analysis tool to find bugs like a grep unix command.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/CoolerVoid/Mosca'
+license=('GPL3')
+depends=('pcre')
+makedepends=('git')
+source=('git+https://github.com/CoolerVoid/Mosca.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Mosca
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd Mosca
+
+  make
+}
+
+package() {
+  cd Mosca
+
+  install -Dm 755 mosca "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md TODO
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

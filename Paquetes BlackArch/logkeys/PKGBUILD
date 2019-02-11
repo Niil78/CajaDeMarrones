@@ -1,0 +1,44 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=logkeys
+pkgver=77.033e512
+pkgrel=1
+pkgdesc='A GNU/Linux keylogger that worked.'
+groups=('blackarch' 'blackarch-keylogger')
+license=('GPL3')
+arch=('any')
+depends=('procps-ng' 'kbd')
+optdepends=('logkeys-keymaps: for additional keymaps')
+makedepends=('git')
+url='https://github.com/kernc/logkeys'
+source=("git+https://github.com/kernc/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+
+prepare() {
+  cd $pkgname
+
+  ./autogen.sh
+}
+
+build() {
+  cd $pkgname/build
+
+  ../configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname/build
+
+  make DESTDIR="$pkgdir" install
+}
+

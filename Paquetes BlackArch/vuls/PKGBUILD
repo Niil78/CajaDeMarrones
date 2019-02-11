@@ -1,0 +1,39 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=vuls
+pkgver=857.256c99f
+pkgrel=1
+groups=('blackarch' 'blackarch-scanner')
+pkgdesc='Vulnerability scanner for Linux/FreeBSD, agentless, written in Go.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/future-architect/vuls'
+license=('GPL3')
+depends=('glibc' 'go' 'sqlite')
+makedepends=('go' 'git')
+source=('git+https://github.com/future-architect/vuls.git')
+sha512sums=('SKIP')
+_url='github.com/future-architect/vuls'
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  install -dm 755 src/$_url && rm -rf src/$_url && mv vuls src/$_url &&
+    cd src/$_url
+
+  GOPATH="$srcdir" go get -d -t $_url
+  GOPATH="$srcdir" go build -v $_url
+}
+
+package() {
+  install -dm 755 "$pkgdir/usr/bin"
+
+  install -Dm 755 "$srcdir/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" src/$url/*.md
+  install -Dm 644 src/$url/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

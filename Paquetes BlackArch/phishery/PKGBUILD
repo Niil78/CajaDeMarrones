@@ -1,0 +1,54 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=phishery
+pkgver=14.5743953
+pkgrel=1
+groups=('blackarch' 'blackarch-backdoor' 'blackarch-social')
+pkgdesc='An SSL Enabled Basic Auth Credential Harvester with a Word Document Template URL Injector.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/ryhanson/phishery'
+license=('custom:unknown')
+depends=('glibc' 'go')
+makedepends=('go' 'git')
+source=('git+https://github.com/ryhanson/phishery.git')
+sha512sums=('SKIP')
+_url='github.com/ryhanson/phishery'
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  install -dm 755 src/$_url && rm -rf src/$_url && mv phishery src/$_url &&
+    cd src/$url
+
+  GOPATH="$srcdir" go get -d -t $_url
+}
+
+package() {
+  cd "$srcdir"
+
+  install -dm 755 "$pkgdir/usr/bin"
+
+  GOPATH="$srcdir" go build -v $_url
+
+  install -Dm 755 "$srcdir/phishery" "$pkgdir/usr/share/$pkgname/$pkgname"
+  install -Dm 644 "src/$url/README.md" "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 "src/$url/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  rm "src/$url/README.md" "src/$url/LICENSE"
+
+  cp -a src/$_url/* "$pkgdir/usr/share/$pkgname"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec ./phishery "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+

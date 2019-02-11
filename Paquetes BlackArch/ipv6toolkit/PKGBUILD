@@ -1,0 +1,32 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ipv6toolkit
+pkgver=2.0
+pkgrel=1
+pkgdesc="SI6 Networks' IPv6 Toolkit"
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+groups=('blackarch' 'blackarch-scanner')
+url='http://www.si6networks.com/tools/ipv6toolkit/'
+license=('GPL')
+provides=('ipv6-toolkit-git')
+conflicts=('ipv6-toolkit-git')
+depends=('libpcap' 'perl')
+source=("http://www.si6networks.com/tools/ipv6toolkit/ipv6toolkit-v$pkgver.tar.gz")
+sha512sums=('d78d894afa7d3b2cec7de9f5a912fda94ab349891c96744dcec2e95dcb53d73decb7037ccff06b5db24f1347c116f397cb7ce5b7198da770880aaa55fac9be75')
+
+build() {
+  cd "$pkgname-v$pkgver"
+
+  make
+}
+
+package() {
+  cd "$pkgname-v$pkgver"
+
+  install -dm 755 "$pkgdir/etc"
+
+  make PREFIX="/usr" ETCPATH="$pkgdir/etc/$pkgname" \
+    SBINPATH="$pkgdir/usr/bin" DESTDIR="$pkgdir/" install
+}
+

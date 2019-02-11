@@ -1,0 +1,54 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=eresi
+pkgver=1289.3e133872
+pkgrel=1
+pkgdesc='The ERESI Reverse Engineering Software Interface.'
+groups=('blackarch' 'blackarch-binary' 'blackarch-reversing'
+        'blackarch-debugger' 'blackarch-disassembler')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/thorkill/eresi'
+license=('GPL2')
+depends=('openssl' 'linux-headers')
+makedepends=('git')
+source=('git+https://github.com/thorkill/eresi.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  export DESTDIR="$pkgdir/usr"
+
+  if [ $CARCH = "x86_64" ]
+  then
+    ./configure --enable-32-64
+  else
+    ./configure --enable-32
+  fi
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/lib"
+
+  make DESTDIR="$pkgdir/usr" install
+
+  install -Dm 644 doc/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  rm doc/LICENSE
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.FIRST doc/*
+
+  rm "$pkgdir/usr/bin/"{e2dbg,elfsh,eresi-config,etrace,evarista,kedbg}
+}
+

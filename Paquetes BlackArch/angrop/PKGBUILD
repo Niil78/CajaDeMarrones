@@ -1,0 +1,39 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=angrop
+pkgver=161.91ae29f
+pkgrel=1
+pkgdesc='A rop gadget finder and chain builder.'
+groups=('blackarch' 'blackarch-exploitation')
+arch=('any')
+url='https://github.com/salls/angrop'
+license=('BSD')
+depends=('python2' 'python2-progressbar' 'python2-pyvex' 'python2-claripy'
+         'python2-simuvex' 'angr-py2')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/salls/angrop.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  python2 setup.py build
+}
+
+package() {
+  cd $pkgname
+
+  python2 setup.py install --root="$pkgdir" --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/tests" tests/*
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=interlace
+pkgver=137.ec93f84
+pkgrel=1
+pkgdesc='Easily turn single threaded command line applications into a fast, multi-threaded application with CIDR and glob support.'
+groups=('blackarch' 'blackarch-networking')
+arch=('any')
+url='https://github.com/codingo/Interlace/releases'
+license=('GPL3')
+depends=('python' 'python-colorclass' 'python-netaddr')
+makedepends=('git' 'python-setuptools')
+source=('git+https://github.com/codingo/Interlace.git')
+sha512sums=('SKIP')
+_dir_name_=Interlace
+
+pkgver() {
+  cd $_dir_name_
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $_dir_name_
+
+  python setup.py build
+}
+
+package() {
+  cd $_dir_name_
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

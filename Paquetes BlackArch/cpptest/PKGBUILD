@@ -1,0 +1,34 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=cpptest
+pkgver=1.1.2
+pkgrel=2
+groups=('blackarch' 'blackarch-code-audit')
+pkgdesc='A portable and powerful, yet simple, unit testing framework for handling automated tests in C++.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://cpptest.sourceforge.net/'
+depends=('gcc-libs')
+license=('GPL')
+source=("http://downloads.sourceforge.net/project/cpptest/cpptest/cpptest-$pkgver/cpptest-$pkgver.tar.gz")
+sha512sums=('da1030c69a5886e752b9ae08b65c501334c7d2d4abd2174190209ce11ed351239a615b9f7c5019ee601289523b2c21a1205d2042e59aea6c2882d77d636fc57a')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  ./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" NEWS INSTALL BUGS README
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+
+  make install DESTDIR="$pkgdir"
+}
+

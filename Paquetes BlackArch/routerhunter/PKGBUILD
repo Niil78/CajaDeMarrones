@@ -1,0 +1,35 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=routerhunter
+pkgver=21.4da257c
+pkgrel=1
+groups=('blackarch' 'blackarch-scanner' 'blackarch-networking')
+pkgdesc='Tool used to find vulnerable routers and devices on the Internet and perform tests.'
+arch=('any')
+url='https://github.com/jh00nbr/Routerhunter-2.0'
+license=('custom:unknown')
+depends=('python2' 'python2-simplejson')
+makedepends=('git')
+source=('git+https://github.com/jh00nbr/Routerhunter-2.0.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd "Routerhunter-2.0"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd "Routerhunter-2.0"
+
+  sed -i 's|bin/env python|bin/env python2|' routerhunter.py
+}
+
+package() {
+  cd "Routerhunter-2.0"
+
+  install -Dm 755 routerhunter.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
+

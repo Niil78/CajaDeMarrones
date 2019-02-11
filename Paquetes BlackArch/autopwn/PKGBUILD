@@ -1,0 +1,38 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=autopwn
+pkgver=177.2f3f605
+pkgrel=6
+groups=('blackarch' 'blackarch-automation')
+pkgdesc='Specify targets and run sets of tools against them.'
+arch=('any')
+url='https://github.com/nccgroup/autopwn'
+license=('GAGPL')
+depends=('python3' 'python-readchar' 'python-inquirer' 'python-screenutils'
+         'python-yaml' 'python-blessings' 'nmap' 'skipfish' 'patator'
+         'hydra' 'cmsmap' 'lynis' 'openssh' 'arachni' 'sslscan' 'metasploit'
+         'nbtscan' 'enum4linux' 'nikto' 'sslyze' 'dirb' 'linenum' 'httrack'
+         'testssl.sh' 'linux-exploit-suggester' 'nfs-utils')
+makedepends=('git' 'python-setuptools')
+source=('git+https://github.com/nccgroup/autopwn.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  python3 setup.py install --root="$pkgdir" --optimize=1
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md docs/*
+  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+}
+

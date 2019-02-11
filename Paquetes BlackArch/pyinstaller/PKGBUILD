@@ -1,0 +1,39 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=pyinstaller
+pkgver=3.3.1
+pkgrel=1
+epoch=2
+groups=('blackarch' 'blackarch-misc')
+pkgdesc='A program that converts (packages) Python programs into stand-alone executables, under Windows, Linux, Mac OS X, Solaris and AIX.'
+arch=('any')
+url="http://www.pyinstaller.org/"
+license=('GPL')
+depends=('python2' 'python2-requests' 'python2-pyusb' 'python2-dis3'
+         'python2-pefile' 'python2-macholib')
+source=("https://files.pythonhosted.org/packages/3c/86/909a8c35c5471919b3854c01f43843d9b5aed0e9948b63e560010f7f3429/PyInstaller-$pkgver.tar.gz")
+sha512sums=('d990c67e92e12a6a5d2b95d2139478824ba0485f5ceee93a27aac63ed80ae13b8acca947742b6a9b5b1489888cfa5ee4ce8a4ae05bc994be4ef726914db1746a')
+options=('!strip' '!emptydirs')
+
+prepare() {
+  cd "PyInstaller-$pkgver"
+  grep -RIl '^#!.*python' . | xargs sed -i '/^#!/ s|.*|#! /usr/bin/env python2|'
+}
+
+package() {
+  cd "PyInstaller-$pkgver"
+
+  rm -rf bootloader old tests PKG-INFO setup.py
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  rm -rf doc
+
+  cp -a --no-preserve=ownership . "$pkgdir/usr/share/$pkgname"
+
+  ln -s "/usr/share/$pkgname/pyinstaller.py" "$pkgdir/usr/bin/$pkgname"
+}
+

@@ -1,0 +1,47 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=changeme
+pkgver=240.3a6e2f7
+pkgrel=1
+groups=('blackarch' 'blackarch-scanner')
+pkgdesc='A default credential scanner.'
+arch=('any')
+url='https://github.com/ztgrace/changeme'
+license=('GPL3')
+depends=('python2' 'python2-python-libnmap' 'python2-lxml' 'python2-netaddr'
+         'python2-requests' 'python2-nose' 'python2-schema' 'python2-logutils'
+         'python2-cerberus' 'python2-tabulate' 'python2-paramiko' 'python2-yaml'
+         'python2-sqlalchemy' 'python2-mock')
+makedepends=('git')
+source=('git+https://github.com/ztgrace/changeme.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+
+  rm README.* COPYING
+
+  cp -a * "$pkgdir/usr/share/$pkgname"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python2 changeme.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+

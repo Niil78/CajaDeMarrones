@@ -1,0 +1,18 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ngrok
+pkgver=2.2.8
+pkgrel=3
+pkgdesc='A tunneling, reverse proxy for developing and understanding networked, HTTP services.'
+arch=('x86_64')
+groups=('blackarch' 'blackarch-tunnel' 'blackarch-networking')
+url='https://ngrok.com'
+license=('Apache')
+source=("https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip")
+sha512sums=('eea4982abad5ad062627667d072b807cd33b3f70f69092d47fed3d4f5d57844ea05d333922c6aba53713eec699242d82da7f315c4db7e64354386d58fdeb8a9a')
+
+package() {
+  install -Dm 755 ngrok  "$pkgdir/usr/bin/$pkgname"
+}
+

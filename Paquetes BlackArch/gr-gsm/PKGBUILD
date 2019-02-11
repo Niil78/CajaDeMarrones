@@ -1,0 +1,43 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=gr-gsm
+pkgver=1110.2f0c096
+pkgrel=1
+pkgdesc="Gnuradio blocks and tools for receiving GSM transmissions"
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+groups=('blackarch' 'blackarch-radio')
+url='https://github.com/ptrkrysik/gr-gsm'
+license=('GPL3')
+depends=('gnuradio' 'libosmocore' 'boost' 'swig' 'log4cpp' 'python2-scipy'
+         'qwt5' 'gnuradio-companion' 'python2-docutils' 'talloc')
+makedepends=('git' 'cmake')
+source=("git+https://github.com/ptrkrysik/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd $pkgname
+
+  mkdir -p build
+  cd build
+  cmake -DCMAKE_INSTALL_PREFIX=/usr ..
+}
+
+build() {
+  cd "$pkgname/build"
+
+  make
+}
+
+package() {
+  cd "$pkgname/build"
+
+  make DESTDIR="$pkgdir" install
+}
+

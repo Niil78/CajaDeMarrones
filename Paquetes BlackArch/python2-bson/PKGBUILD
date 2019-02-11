@@ -1,0 +1,30 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-bson
+pkgver=0.5.7
+pkgrel=2
+pkgdesc='BSON codec for Python.'
+arch=('any')
+url='https://pypi.org/project/bson/#files'
+license=('BSD')
+depends=('python2' 'python2-six' 'python2-dateutil')
+makedepends=('python2-setuptools' 'python2-pip')
+source=("https://files.pythonhosted.org/packages/ed/c4/81085cce5721797e409bbcfc60509fcc2a770760be9c97547ade71d7e857/bson-$pkgver.tar.gz")
+sha512sums=('c83145dcc1d94ddc02140a3adf07365a8fa0943fc961acf5a5193cc1d0645f69583da8e732c0b7914d7d6048b79f60477433779690daf80a8e608f2e687cea77')
+
+build() {
+  cd "bson-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "bson-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+
+  rm "$pkgdir/usr/lib/python2.7/site-packages/bson/__init__."{py,pyc,pyo}
+}
+

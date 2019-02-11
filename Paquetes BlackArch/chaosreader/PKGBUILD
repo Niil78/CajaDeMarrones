@@ -1,0 +1,19 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=chaosreader
+pkgver=0.94
+pkgrel=3
+groups=('blackarch' 'blackarch-networking' 'blackarch-sniffer')
+pkgdesc='A freeware tool to trace tcp, udp etc. sessions and fetch application data from snoop or tcpdump logs.'
+arch=('any')
+url='http://chaosreader.sourceforge.net/'
+license=('custom:unknown')
+depends=('perl')
+source=("chaosreader.pl::http://downloads.sourceforge.net/project/chaosreader/chaosreader/$pkgver/chaosreader$pkgver")
+sha512sums=('0ddba8d176be2d26004070dfa1e521921cdc84ac4e1652b889e7962d5beacbf752232a83dd4b7575e770b4d7ec40ea2afca4f76cacf53dbb590a46a0aa66cdac')
+
+package() {
+  install -Dm 755 chaosreader.pl "$pkgdir/usr/bin/$pkgname"
+}
+

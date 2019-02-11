@@ -1,0 +1,44 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=perl-netpacket
+pkgver=1.7.0
+pkgrel=1
+pkgdesc='Assemble/disassemble network packets at the protocol level.'
+arch=('any')
+url='http://search.cpan.org/dist/NetPacket/'
+license=('artistic2')
+makedepends=('perl-module-build>=0.360.100')
+provides=('perl-netpacket-arp=0.43.1' 'perl-netpacket-ethernet=0.43.1'
+          'perl-netpacket-icmp=0.43.1' 'perl-netpacket-icmpv6=0.43.1'
+          'perl-netpacket-igmp=0.43.1' 'perl-netpacket-ip=0.43.1'
+          'perl-netpacket-ipv6=0.43.1' 'perl-netpacket-pflog=0.43.1'
+          'perl-netpacket-tcp=0.43.1' 'perl-netpacket-udp=0.43.1')
+options=(!emptydirs)
+source=("http://search.cpan.org/CPAN/authors/id/Y/YA/YANICK/NetPacket-$pkgver.tar.gz")
+sha512sums=('6629206f4e80e8d1ca5120e403fc66358e9fa834f00a6773fc76ba0a7ea3b492a3bdfab0c6a8ab4ec6a9238074e533729cda3a5f13b6f49d1454fb8f59ec432c')
+
+build() {
+  cd "NetPacket-$pkgver"
+
+  ( export PERL_MM_USE_DEFAULT=1 PERL5LIB=""                 \
+      PERL_AUTOINSTALL=--skipdeps                            \
+      PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR='$pkgdir'"     \
+      PERL_MB_OPT="--installdirs vendor --destdir '$pkgdir'" \
+      MODULEBUILDRC=/dev/null
+
+    /usr/bin/perl Makefile.PL
+
+    make
+  )
+}
+
+package() {
+  cd "NetPacket-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+
+  find "$pkgdir" -name perllocal.pod -delete
+  find "$pkgdir" -name .packlist -delete
+}
+

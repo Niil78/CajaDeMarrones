@@ -1,0 +1,50 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=freeipmi
+pkgver=1.6.3
+pkgrel=1
+pkgdesc='Sensor monitoring, system event monitoring, power control, and serial-over-LAN (SOL).'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+groups=('blackarch' 'blackarch-networking' 'blackarch-misc')
+url='http://www.gnu.org/software/freeipmi/'
+license=('GPL')
+depends=('libgcrypt')
+options=('!libtool')
+source=("http://ftp.gnu.org/gnu/freeipmi/freeipmi-$pkgver.tar.gz")
+sha512sums=('473dc26fe22e5d801cb640d5e99ded715e22e8c65d21632145e6711a24ffd60e09a842194d4cc87ad3f506f4b5456be393d87baf726d2479a34f6fc8644eedd7')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  if [[ "$CARCH" == "i686" || "$CARCH" == "x86_64" ]];
+  then
+    ./configure --prefix=/usr --sbindir=/usr/bin --mandir=/usr/share/man \
+      --sysconfdir=/etc --localstatedir=/var/lib --infodir=/usr/share/info
+  else
+    ./configure --prefix=/usr --sbindir=/usr/bin --mandir=/usr/share/man \
+      --sysconfdir=/etc --localstatedir=/var/lib --infodir=/usr/share/info \
+      --build=arm
+  fi
+
+  make
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+ make DESTDIR="$pkgdir" install
+
+  mv "$pkgdir/etc/init.d" "$pkgdir/etc/rc.d"
+  mv "$pkgdir/etc/sysconfig" "$pkgdir/etc/conf.d"
+
+  sed -e 's|/etc/init.d/|/etc/rc.d/|g' \
+    -e 's|/etc/rc.d/init.d/functions|/etc/rc.d/functions|g' \
+    -i "$pkgdir"/etc/rc.d/*
+
+  sed -e 's|CONFFILE=/etc/sysconfig/bmc-watchdog|CONFFILE=/etc/cond.f/bmc-watchdog|g' \
+    -i "$pkgdir/etc/rc.d/bmc-watchdog"
+
+  rm -Rf "$pkgdir/usr/share/info/dir"
+}
+

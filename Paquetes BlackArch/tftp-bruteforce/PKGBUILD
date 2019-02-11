@@ -1,0 +1,35 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=tftp-bruteforce
+pkgver=0.1
+pkgrel=6
+pkgdesc="A fast TFTP filename bruteforcer written in perl."
+url='http://www.hackingexposedcisco.com/'
+groups=('blackarch' 'blackarch-cracker')
+license=('LGPL')
+depends=('perl')
+arch=('any')
+source=('http://dl.packetstormsecurity.net/UNIX/audit/TFTP-bruteforce.tar.gz')
+sha512sums=('903c1f7671dc001ed4329dad54c294b00746a8479654199c506bb1faf7c0f95f4a23c20fd39948167078016f3bea36b3ac025fe5de648cc9cdfeda4f881c16b1')
+
+package() {
+  cd TFTP-bruteforce
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 755 tftpbrute.pl "$pkgdir/usr/share/$pkgname"
+  install -m 644 README.txt brutefile.txt "$pkgdir/usr/share/$pkgname"
+
+  cat > "$pkgdir/usr/bin/tftpbrute" << EOF
+#!/bin/sh
+echo >&2
+echo >&2 '/usr/share/tftp-bruteforce/brutefile.txt exists.'
+echo >&2 'Enjoy.'
+echo >&2
+exec /usr/share/tftp-bruteforce/tftpbrute.pl
+EOF
+
+  chmod +x "$pkgdir/usr/bin/tftpbrute"
+}
+

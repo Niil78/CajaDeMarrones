@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=hpfeeds
+pkgver=164.f18712d
+pkgrel=2
+pkgdesc='Honeynet Project generic authenticated datafeed protocol.'
+arch=('any')
+groups=('blackarch' 'blackarch-honeypot' 'blackarch-networking')
+url='https://github.com/rep/hpfeeds'
+license=('BSD')
+depends=('python2')
+makedepends=('git')
+source=('git://github.com/rep/hpfeeds.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+}
+

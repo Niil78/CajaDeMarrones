@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ike-scan
+pkgver=1.9
+pkgrel=6
+groups=('blackarch' 'blackarch-scanner')
+pkgdesc='A tool that uses IKE protocol to discover, fingerprint and test IPSec VPN servers.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://www.nta-monitor.com/tools/ike-scan/'
+license=('GPL')
+depends=('openssl')
+makedepends=('make' 'gcc')
+source=("http://www.nta-monitor.com/tools/ike-scan/download/ike-scan-$pkgver.tar.gz")
+sha512sums=('e973742c32c7b65fe134233482c94e3e94db3b32')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  ./configure --prefix=/usr --mandir=/usr/share/man --with-openssl
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+}
+

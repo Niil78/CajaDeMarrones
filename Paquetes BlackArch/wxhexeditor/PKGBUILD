@@ -1,0 +1,37 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=wxhexeditor
+pkgver=663.16f75d1
+pkgrel=2
+pkgdesc='A free hex editor / disk editor for Linux, Windows and MacOSX.'
+arch=('x86_64' 'armv6h' 'arvm7h')
+groups=('blackarch' 'blackarch-binary' 'blackarch-misc')
+url='http://wxhexeditor.sourceforge.net/'
+license=('GPL')
+depends=('wxgtk' 'mhash' 'python' 'python2')
+makedepends=('git')
+source=('git+https://github.com/EUA/wxHexEditor.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd wxHexEditor
+
+  echo "$(git rev-list --count HEAD)"."$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd wxHexEditor
+
+  make CXXFLAGS="${CXXFLAGS/-fno-rtti/}"
+}
+
+package() {
+  cd wxHexEditor
+
+  make DESTDIR="$pkgdir" PREFIX="/usr" install
+
+  install -Dm 644 docs/Change.log "$pkgdir/usr/share/doc/$pkgname/Change.log"
+  install -Dm 644 docs/GPL.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

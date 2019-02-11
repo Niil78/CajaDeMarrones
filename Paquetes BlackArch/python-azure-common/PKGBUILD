@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-azure-common
+pkgver=1.1.18
+pkgrel=1
+pkgdesc='Microsoft Azure Client Library for Python (Common).'
+arch=('any')
+url='https://pypi.org/project/azure-common/#files'
+license=('MIT')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/49/5d/3d5955e4843093a11c2bae4372ca867e759586483852091752b54acccb25/azure-common-1.1.18.zip")
+sha512sums=('90225683795f7f129c31bd0afc09853153a09dd733734e9a7baa31e55295f9563b9aca31e6bc89ec5e8d898e13c24b2bbc8e3cbcaf17eae7a86e8bd06381bf5a')
+
+build() {
+  cd "azure-common-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "azure-common-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

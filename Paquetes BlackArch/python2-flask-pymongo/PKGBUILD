@@ -1,0 +1,30 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-flask-pymongo
+pkgver=2.2.0
+pkgrel=2
+pkgdesc='PyMongo support for Flask applications.'
+arch=('any')
+url='https://pypi.python.org/pypi/Flask-PyMongo/'
+license=('BSD')
+depends=('python2-flask')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/78/2c/1c1ab13a9e0da6f67d2467a6bac99dc3d3d0cd9387f779f000cc840d1002/Flask-PyMongo-$pkgver.tar.gz")
+sha512sums=('2f572b07780488fcbd7d921e1b71d8c0da5562912a59ee26b8d0c49889d18899caa59ec78c70a861e7b444834b05fba392ef5db62e8e4828a8666e7f284c408c')
+
+build() {
+  cd "Flask-PyMongo-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "Flask-PyMongo-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+
+  rm -rf "$pkgdir/usr/lib/python2.7/site-packages/tests"
+}
+

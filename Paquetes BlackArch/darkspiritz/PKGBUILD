@@ -1,0 +1,46 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname=darkspiritz
+_pkgname=DarkSpiritz
+pkgver=182.fd7d891
+pkgrel=1
+pkgdesc='A penetration testing framework for Linux, MacOS, and Windows systems.'
+arch=('any')
+groups=('blackarch' 'blackarch-exploitation' 'blackarch-automation')
+url='https://github.com/DarkSpiritz/DarkSpiritz'
+license=('MIT')
+depends=('python' 'impacket' 'python-pysmb' 'python-pycryptodome'
+         'python-paramiko' 'python-scapy' 'python-requests'
+         'python-terminaltables')
+makedepends=('git')
+source=("git+https://github.com/$_pkgname/$_pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $_pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $_pkgname
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  install -dm 755 "$pkgdir/usr/bin"
+
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python start.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+
+}
+

@@ -1,0 +1,48 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=recon-ng
+pkgver=4.9.5
+pkgrel=1
+epoch=1
+groups=('blackarch' 'blackarch-recon')
+pkgdesc='A full-featured Web Reconnaissance framework written in Python.'
+arch=('any')
+url='https://bitbucket.org/LaNMaSteR53/recon-ng'
+license=('GPL3')
+depends=('python2' 'python2-dicttoxml' 'python2-dnspython'
+         'python2-jsonrpclib-pelix'
+         'python2-lxml' 'python2-mechanize' 'python2-slowaes'
+         'python2-xlsxwriter' 'python2-olefile' 'python2-pypdf2'
+         'python2-flask' 'python2-unicodecsv')
+makedepends=('git')
+source=("https://bitbucket.org/LaNMaSteR53/recon-ng/get/v$pkgver.tar.bz2")
+sha512sums=('3afd877b707abfcbd90b796bfa81e197fa0a0a7ade4608b1a28be82e36e0e7c8c19263af1218dbeb7cdedc721a364553140b62448c91a30e69d1040a96718fca')
+
+package() {
+  cd "LaNMaSteR53-$pkgname-41e96fd58891"
+
+  _bins='recon-ng recon-cli recon-rpc recon-web'
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md REQUIREMENTS \
+    VERSION
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  rm LICENSE README.md
+
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  for bin in $_bins
+  do
+    cat >> "$pkgdir/usr/bin/$bin" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python2 $bin "\$@"
+EOF
+    chmod +x "$pkgdir/usr/bin/$bin"
+  done
+}
+

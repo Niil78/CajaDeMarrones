@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-pycares
+pkgver=2.4.0
+pkgrel=1
+pkgdesc='Python interface for c-ares.'
+url='https://pypi.org/project/pycares/#files'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('MIT')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/86/0c/3b662b2629fbde4b81ac36f2735495751fbde74a478ba5fe0c30e4db8f59/pycares-$pkgver.tar.gz")
+sha512sums=('7770a2b1fd69bb800019a292e5c9fc1f737b044fb4ca5166ead197da3515f2edac55f947a68f3505c9b404745529287114667d742162c98f2ff84b2c330ef295')
+
+build() {
+  cd "pycares-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "pycares-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

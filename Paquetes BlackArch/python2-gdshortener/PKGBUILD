@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python2-gdshortener
+pkgver=0.0.2
+pkgrel=3
+pkgdesc='A module that provides access to .gd URL Shortener.'
+arch=('any')
+url='https://pypi.python.org/pypi/gdshortener'
+license=('LGPL')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/source/g/gdshortener/gdshortener-$pkgver.tar.gz")
+sha512sums=('640f9ddf20e7606418e5ad183cd43ad29f9533de75a7eaad76ad5f6fe8386c7c7dc3980167895746b158364e614a147c05394e65d2910fdaa35a5963c5b4651d')
+
+build() {
+  cd "gdshortener-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "gdshortener-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

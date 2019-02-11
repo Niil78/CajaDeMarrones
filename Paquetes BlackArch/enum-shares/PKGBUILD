@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=enum-shares
+pkgver=7.97cba5a
+pkgrel=2
+pkgdesc='Tool that enumerates shared folders across the network and under a custom user account.'
+groups=('blackarch' 'blackarch-scanner')
+arch=('any')
+url='https://github.com/dejanlevaja/enum_shares'
+license=('GPL2')
+depends=('python2' 'python2-pysmb')
+makedepends=('git')
+source=('git+https://github.com/dejanlevaja/enum_shares.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd enum_shares
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd enum_shares
+
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|g' enum_shares.py
+}
+
+package() {
+  cd enum_shares
+
+  install -Dm 755 enum_shares.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+}
+

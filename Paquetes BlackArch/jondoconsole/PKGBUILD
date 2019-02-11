@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=jondoconsole
+pkgver=00.00.163
+pkgrel=3
+pkgdesc='Redirects internet traffic trough a mix of proxy servers to hide the origin of the requests. CLI version.'
+arch=('any')
+license=('BSD')
+url='https://anonymous-proxy-servers.net/'
+depends=('java-environment')
+install="jondoconsole.install"
+source=('https://anonymous-proxy-servers.net/downloads/JonDoConsole.jar'
+        'https://anonymous-proxy-servers.net/downloads/JonDoConsole.jar.asc'
+        'jondoconsole'
+        'licence')
+noextract=("JonDoConsole.jar")
+sha256sums=('4a5fa8ce386d590e8e91c94687a8de090bf013519af1da08cb49ca2434bd543d'
+            'SKIP'
+            '954afad6b06569465b0ed682638fc12c7c699da4b94eaf7fa450686e8909083e'
+            '9c7de55f80fd78ef6f8d39fa0309defbc42ac848c2c9f5a995901326a1a43e8d')
+
+package() {
+  install -Dm 755 jondoconsole "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 JonDoConsole.jar "$pkgdir/usr/share/java/$pkgname/JonDoConsole.jar"
+  install -Dm 644 licence "$pkgdir/usr/share/licenses/$pkgname/LICENCE"
+}
+

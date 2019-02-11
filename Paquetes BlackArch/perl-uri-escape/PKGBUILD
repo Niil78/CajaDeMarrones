@@ -1,0 +1,38 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=perl-uri-escape
+pkgver=1.74
+pkgrel=2
+pkgdesc='Percent-encode and percent-decode unsafe characters.'
+arch=('any')
+url='https://metacpan.org/pod/URI::Escape'
+license=('PerlArtistic' 'GPL')
+options=('!emptydirs')
+depends=('perl')
+source=("http://search.cpan.org/CPAN/authors/id/E/ET/ETHER/URI-$pkgver.tar.gz")
+sha512sums=('b537bd09c355989a2bb1919e2c228cf189e57f993add4246fa482d8ee5ec814266c6fb3229befce2f294456ee784a819d9a54013c43a2ad41b5d8914fabf046b')
+
+build() {
+  (
+    export PERL_MM_USE_DEFAULT=1 PERL5LIB="" PERL_AUTOINSTALL=--skipdeps \
+    PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR='$pkgdir'"     \
+    PERL_MB_OPT="--installdirs vendor --destdir '$pkgdir'" \
+    MODULEBUILDRC=/dev/null
+
+    cd "URI-$pkgver"
+
+    perl Makefile.PL
+
+    make
+  )
+}
+
+package() {
+  cd "URI-$pkgver"
+
+  make install
+
+  find "$pkgdir" -name .packlist -o -name perllocal.pod -delete
+}
+

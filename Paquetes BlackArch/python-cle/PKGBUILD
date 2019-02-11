@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-cle
+pkgver=8.19.2.4
+pkgrel=1
+pkgdesc='Interface to analyze what they are and what they would look like in memory.'
+arch=('any')
+url='https://pypi.org/project/cle/#files'
+license=('BSD')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/ea/19/efb3c1505b9c679e78e1d29a1fc98d3ff41e6d1a772176be85dc07709083/cle-8.19.2.4.tar.gz")
+sha512sums=('fce8f435b8afb9530f169f984c20ad3b730477c3199b528054ff6a7d301b29c0d06c5e16f68203bb462b8a823075306fce8aa4517a4533abe6393be68194df5e')
+
+build() {
+  cd "cle-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "cle-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

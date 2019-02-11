@@ -1,0 +1,45 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=recaf
+pkgver=1.8.2.651.6f39507
+pkgrel=1
+groups=('blackarch' 'blackarch-decompiler' 'blackarch-reversing')
+pkgdesc='Modern Java bytecode editor.'
+arch=('any')
+url='https://github.com/Col-E/Recaf'
+license=('MIT')
+depends=('java-runtime' 'java-environment')
+makedepends=('maven' 'git')
+source=('git+https://github.com/Col-E/Recaf.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Recaf
+
+  echo $(git describe --tags).$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd Recaf
+
+  mvn package
+}
+
+package() {
+  cd Recaf
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  cp "$srcdir/Recaf/target/recaf-*-jar-with-dependencies.jar" \
+    "$pkgdir/usr/share/$pkgname/recaf.jar"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+java -jar /usr/share/$pkgname/recaf.jar "\$@"
+EOF
+
+  chmod 755 "$pkgdir/usr/bin/$pkgname"
+}
+

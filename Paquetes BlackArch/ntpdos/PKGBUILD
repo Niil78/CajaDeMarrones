@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ntpdos
+pkgver=21.988eea7
+pkgrel=2
+pkgdesc='Create a DDOS attack using NTP servers.'
+groups=('blackarch' 'blackarch-dos')
+arch=('any')
+url='https://github.com/vpnguy/ntpdos'
+license=('GPL2')
+depends=('python2')
+makedepends=('git')
+source=('git+https://github.com/vpnguy/ntpdos.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i 's|/env python|/env python2|' ntpdos.py
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm 755 ntpdos.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

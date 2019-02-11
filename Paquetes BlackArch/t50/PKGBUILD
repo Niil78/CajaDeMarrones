@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=t50
+pkgver=5.8.3
+pkgrel=1
+groups=('blackarch' 'blackarch-dos' 'blackarch-networking')
+pkgdesc='Experimental Multi-protocol Packet Injector Tool.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://gitlab.com/fredericopissarra/t50/tags'
+license=('GPL2')
+depends=('glibc')
+source=("https://gitlab.com/fredericopissarra/t50/-/archive/v$pkgver/t50-v$pkgver.tar.gz")
+sha512sums=('c662d265237dbc7ab4b6cdf512a01eb8dd30ccc5f870dd03b3589461ec296e243a00dc6d6ebe926b322186847a899cd91d7cb51629169ac8ed44f3cdd90b65a8')
+
+build() {
+  cd "$pkgname-v$pkgver"
+
+  make
+}
+
+package() {
+  cd "$pkgname-v$pkgver"
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/man/man8"
+
+  #make DESTDIR="$pkgdir" install
+
+  install -Dm 755 bin/t50 "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" TODO CHANGELOG doc/*.md \
+    doc/README.modules
+  install -Dm 644 doc/t50.8 "$pkgdir/usr/share/man/man8/t50.8"
+}
+

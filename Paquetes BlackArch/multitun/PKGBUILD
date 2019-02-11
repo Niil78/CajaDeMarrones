@@ -1,0 +1,37 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=multitun
+pkgver=44.97f2ede
+pkgrel=2
+groups=('blackarch' 'blackarch-tunnel')
+pkgdesc='Tunnel arbitrary traffic through an innocuous WebSocket.'
+arch=('any')
+url='https://github.com/covertcodes/multitun'
+license=('custom:unknown')
+depends=('python2' 'python2-twisted' 'python2-iniparse' 'python2-autobahn'
+         'python2-python-pytun' 'python2-pycryptodome')
+makedepends=('git')
+source=('git+https://github.com/covertcodes/multitun.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i 's|multitun.conf|/etc/multitun.conf|g' multitun.py
+}
+
+package() {
+  cd $pkgname
+
+  install -Dm 755 multitun.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 multitun.conf "$pkgdir/etc/multitun.conf"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+}
+

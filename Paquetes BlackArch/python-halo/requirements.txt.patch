@@ -1,0 +1,17 @@
+--- src/halo-0.0.23/requirements.txt	2019-02-01 10:13:02.000000000 +0100
++++ requirements.txt	2019-02-03 12:55:52.819999339 +0100
+@@ -1,7 +1,7 @@
+-backports.shutil_get_terminal_size==1.0.0;python_version < '3.3'
+-log_symbols==0.0.12
+-spinners==0.0.23
+-cursor==1.2.0
+-termcolor==1.1.0
+-colorama==0.3.9
+-six==1.11.0
++backports.shutil_get_terminal_size
++log_symbols
++spinners
++cursor
++termcolor
++colorama
++six

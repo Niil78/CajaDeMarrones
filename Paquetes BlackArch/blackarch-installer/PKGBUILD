@@ -1,0 +1,33 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=blackarch-installer
+pkgver=1.0.13
+pkgrel=1
+pkgdesc='The official BlackArch Linux installer.'
+arch=('any')
+url='https://github.com/BlackArch/blackarch-installer'
+license=('GPL3')
+depends=('bash')
+source=("https://github.com/BlackArch/blackarch-installer/archive/v$pkgver.tar.gz")
+sha512sums=('50a5ac16a7b01172e730d42137708ac8d08c7e15a52d404b0597089fbf33ede7a62867cf51a203228a205c20969320901f7f3f89178ec0b9660d558d95d5c6a8')
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -dm 755 "$pkgdir/usr/bin/"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" docs/* \
+    README.md
+
+  rm -rf docs README.md
+
+  cp -a * "$pkgdir/usr/share/$pkgname"
+
+  chmod +x "$pkgdir/usr/share/$pkgname/blackarch-install"
+
+  ln -s "/usr/share/$pkgname/blackarch-install" \
+    "$pkgdir/usr/bin/blackarch-install"
+}
+

@@ -1,0 +1,44 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=dump1090
+pkgver=386.bff92c4
+pkgrel=3
+pkgdesc='A simple Mode S decoder for RTLSDR devices.'
+groups=('blackarch' 'blackarch-networking' 'blackarch-misc')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/MalcolmRobb/dump1090'
+license=('custom:BSD')
+depends=('rtl-sdr')
+makedepends=('git')
+source=('git+https://github.com/MalcolmRobb/dump1090.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  sed -i 's#./public_html#/usr/share/dump1090/public_html#g' dump1090.h
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 755 dump1090 "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -m 644 TODO "$pkgdir/usr/share/doc/$pkgname/TODO"
+
+  rm README.md TODO
+
+  cp -a public_html testfiles tools "$pkgdir/usr/share/$pkgname/"
+}
+

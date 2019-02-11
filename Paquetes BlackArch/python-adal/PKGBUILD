@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-adal
+pkgver=1.2.1
+pkgrel=1
+pkgdesc='The ADAL for Python library makes it easy for python application to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources.'
+arch=('any')
+url='https://pypi.org/project/adal/#files'
+license=('MIT')
+depends=('python' 'python-pyjwt')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/82/43/a1e4b7368eec9653660ee91f023af36056028cea97e3550f85866a0c3f2f/adal-$pkgver.tar.gz")
+sha512sums=('4a5f6032f61eea8af42ec80e9d70f51312454531781a42565c5b169bd5b2ab90bde54ec982b5084ebdfc3ce4f1faf028afff64475a2e27518ce523746ac25ce3')
+
+build() {
+  cd "adal-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "adal-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

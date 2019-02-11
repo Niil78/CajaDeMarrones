@@ -1,0 +1,39 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=wordlistctl
+pkgver=0.7.5
+pkgrel=1
+groups=('blackarch' 'blackarch-misc')
+pkgdesc='Fetch, install and search wordlist archives from websites and torrent peers.'
+arch=('any')
+url='https://github.com/BlackArch/wordlistctl'
+license=('GPL3')
+depends=('python' 'python-beautifulsoup4' 'python-rarfile' 'python-requests'
+         'python-libarchive-c' 'libtorrent-rasterbar' 'python-termcolor')
+source=("https://github.com/BlackArch/wordlistctl/archive/v$pkgver.tar.gz")
+sha512sums=('2ca47732b9ef4ad6665bcf5807f0f496965ac1105118dbbca1264a9f69cb5c0ab4d55074059b7e472a79eaea2416fc6adc9506bac476a8cc7839ba4fe1ecb164')
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm 644 bash-completion/$pkgname \
+    "$pkgdir/usr/share/bash-completion/completions/$pkgname"
+
+  rm -r README.md LICENSE bash-completion
+
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+exec /usr/share/$pkgname/$pkgname.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+

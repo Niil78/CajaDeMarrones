@@ -1,0 +1,50 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=gosint
+pkgver=195.2c26eee
+pkgrel=1
+pkgdesc='OSINT framework in Go.'
+groups=('blackarch' 'blackarch-recon')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/Nhoya/gOSINT'
+license=('GPL3')
+depends=('go')
+makedepends=('git' 'go-pie')
+source=('git+https://github.com/Nhoya/gOSINT.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd gOSINT
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  _deps='github.com/deckarep/golang-set github.com/nhoya/goPwned'
+  _deps="$_deps github.com/jessevdk/go-flags gopkg.in/src-d/go-git.v4"
+  _deps="$_deps github.com/jaytaylor/html2text"
+  _deps="$_deps gopkg.in/ns3777k/go-shodan.v2/shodan"
+  _deps="$_deps github.com/deckarep/golang-set"
+  _deps="$_deps github.com/jessevdk/go-flags"
+
+  export GOPATH="$srcdir"
+
+  for d in $_deps
+  do
+    go get -v -u $d
+  done
+
+  cd gOSINT
+  go build
+
+  #install -Dm 644 config/gOSINT.conf "$HOME/.config/gOSINT.conf"
+  install -Dm 644 config/config.json "$HOME/.config/gOSINT.conf"
+  install -Dm 755 gOSINT "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

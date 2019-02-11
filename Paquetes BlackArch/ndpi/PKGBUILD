@@ -1,0 +1,46 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=ndpi
+_name=nDPI
+pkgver=2.4
+pkgrel=2
+pkgdesc='Open and Extensible GPLv3 Deep Packet Inspection Library.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/ntop/nDPI'
+depends=('libpcap')
+makedepends=('autogen' 'automake' 'autoconf' 'clang' 'gcc' 'libtool')
+license=('GPL3')
+source=("https://github.com/ntop/$_name/archive/$pkgver.tar.gz"
+        'makefile.patch')
+sha512sums=('7c746c167ab3ebafbe8646f752c95e32d66237a0a86adeec9ded1ec7e20f62170a9b1c4e5d25594f6459f5c0f616c27c5b393151d936471590f16df3fa3fa884'
+            '1f733995e3597a2745836fc56d5c85047436a0bf50b99506cdb086f770fe0e0c1306d477207f20510660df51b3ac80a47734495a1c1917358a3b4e4bef725166')
+
+prepare() {
+  cd "$_name-$pkgver"
+
+  patch -Np1 -i ../makefile.patch
+}
+
+build() {
+  cd "$_name-$pkgver"
+
+  ./autogen.sh
+
+  ./configure --prefix=/usr --with-pic --includedir=/usr/include \
+    --libdir=/usr/lib
+
+  make
+}
+
+package() {
+  cd "$_name-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+
+  # dirt temp hack to circumvent the error from xplico search for header files
+  # in /usr/include/libndpi ...
+  mkdir -p "$pkgdir/usr/include/libndpi"
+  cp -a src/include/*.h "$pkgdir/usr/include/libndpi"
+}
+

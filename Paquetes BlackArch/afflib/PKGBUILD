@@ -1,0 +1,34 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=afflib
+pkgver=3.7.17
+pkgrel=1
+groups=('blackarch' 'blackarch-forensic')
+pkgdesc='An extensible open format for the storage of disk images and related forensic information.'
+arch=('any')
+url='https://github.com/sshock/AFFLIBv3'
+license=('custom')
+depends=('ncurses' 'zlib' 'openssl' 'curl' 'expat' 'readline')
+makedepends=('make' 'gcc')
+source=("https://github.com/sshock/AFFLIBv3/archive/v$pkgver.tar.gz")
+sha512sums=('21067a8cb7c7b3d75f91883b2f9b1c978e055a2df6331dc68245332226d042a6b82f9f5d996e6bd1d5155de511827d5636c75ab1ee0a6957815aab3bb1cff49b')
+
+build() {
+  cd "AFFLIBv3-$pkgver"
+
+  sh bootstrap.sh
+
+  ./configure --prefix=/usr --sysconfdir=/etc
+
+  make
+}
+
+package() {
+  cd "AFFLIBv3-$pkgver"
+
+  make DESTDIR="$pkgdir" install
+
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+}
+

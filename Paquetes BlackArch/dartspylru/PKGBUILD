@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=dartspylru
+pkgver=7.5ef01b1
+pkgrel=3
+pkgdesc='Simple dictionary with LRU behaviour.'
+arch=('any')
+groups=('blackarch' 'blackarch-misc')
+url='https://pypi.python.org/pypi/darts.util.lru'
+license=('MIT')
+depends=('python2')
+makedepends=('git' 'python2-setuptools')
+source=('dartspylru::git+https://github.com/deterministic-arts/DartsPyLRU.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  python2 setup.py build
+}
+
+package() {
+  cd $pkgname
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  install -Dm 644 README.txt "$pkgdir/usr/share/doc/$pkgname/README.txt"
+}
+

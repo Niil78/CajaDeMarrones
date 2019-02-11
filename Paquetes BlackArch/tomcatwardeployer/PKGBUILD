@@ -1,0 +1,41 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=tomcatwardeployer
+pkgver=88.a3d7d37
+pkgrel=1
+pkgdesc='Apache Tomcat auto WAR deployment & pwning penetration testing tool.'
+groups=('blackarch' 'blackarch-exploitation' 'blackarch-automation'
+        'blackarch-webapp')
+arch=('any')
+url='https://github.com/mgeeky/tomcatWarDeployer'
+license=('GPL3')
+depends=('python2' 'python2-beautifulsoup3' 'python2-beautifulsoup4')
+makedepends=('git')
+source=('git+https://github.com/mgeeky/tomcatWarDeployer.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd tomcatWarDeployer
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd tomcatWarDeployer
+
+  sed -i 's|/bin/python|/bin/python2|' tomcatWarDeployer.py
+}
+
+package() {
+  cd tomcatWarDeployer
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 755 tomcatWarDeployer.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" screen1.png
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

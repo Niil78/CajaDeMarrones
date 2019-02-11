@@ -1,0 +1,44 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=rifiuti2
+pkgver=240.4c156c5
+pkgrel=1
+groups=('blackarch' 'blackarch-forensic' 'blackarch-recon')
+pkgdesc='A rewrite of rifiuti, a great tool from Foundstone folks for analyzing
+Windows Recycle Bin INFO2 file.'
+url="https://code.google.com/p/rifiuti2/"
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('custom:BSD')
+conflicts=('rifiuti')
+depends=('glib2')
+makedepends=('git')
+source=("git+https://github.com/abelcheung/rifiuti2.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  ./autogen.sh
+
+  ./configure --prefix=/usr
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  make DESTDIR="$pkgdir" install
+
+  install -Dm 644 docs/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  rm docs/LICENSE
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" NEWS.md ChangeLog docs/*
+}
+

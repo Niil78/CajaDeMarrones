@@ -1,0 +1,37 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=freewifi
+pkgver=30.1cb752b
+pkgrel=2
+pkgdesc='How to get free wifi.'
+groups=('blackarch' 'blackarch-wireless')
+arch=('any')
+url='https://github.com/kylemcdonald/FreeWifi'
+license=('MIT')
+depends=('python' 'python-netifaces' 'python-tqdm' 'python-netaddr'
+         'python-argparse' 'python-wireless' 'python-spoofmac')
+makedepends=('git')
+source=('git+https://github.com/kylemcdonald/FreeWifi.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd FreeWifi
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd FreeWifi
+
+  sed -i '1i\#!/usr/bin/python3' wifi-users.py
+}
+
+package() {
+  cd FreeWifi
+
+  install -Dm 755 wifi-users.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" readme.md
+  install -Dm 644 license.md "$pkgdir/usr/share/licenses/$pkgname/license.md"
+}
+

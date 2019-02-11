@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=hatcloud
+pkgver=32.996ff9e
+pkgrel=1
+pkgdesc='Bypass CloudFlare with Ruby.'
+groups=('blackarch' 'blackarch-recon')
+arch=('any')
+url='https://github.com/HatBashBR/HatCloud'
+license=('GPL3')
+depends=('ruby')
+makedepends=('git')
+source=('git+https://github.com/HatBashBR/HatCloud.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd HatCloud
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd HatCloud
+
+  sed -i 's|local/bin|/bin|' hatcloud.rb
+}
+
+package() {
+  cd HatCloud
+
+  install -Dm 755 hatcloud.rb "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

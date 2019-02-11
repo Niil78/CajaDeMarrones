@@ -1,0 +1,34 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=delorean
+pkgver=11.2a8b538
+pkgrel=2
+groups=('blackarch' 'blackarch-exploitation' 'blackarch-proxy')
+pkgdesc='NTP Main-in-the-Middle tool.'
+arch=('any')
+url='https://github.com/PentesterES/Delorean'
+license=('custom:unknown')
+makedepends=('git')
+depends=('python2' 'python2-scapy')
+source=('git+https://github.com/PentesterES/Delorean.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Delorean
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd Delorean
+
+  sed -i 's|env python|env python2|' delorean.py
+}
+
+package() {
+  cd Delorean
+
+  install -Dm 755 delorean.py "$pkgdir/usr/bin/$pkgname"
+}
+

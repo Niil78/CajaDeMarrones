@@ -1,0 +1,39 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=bluto
+pkgver=133.0e11ea0
+pkgrel=1
+epoch=1
+groups=('blackarch' 'blackarch-scanner' 'blackarch-recon')
+pkgdesc='Recon, Subdomain Bruting, Zone Transfers.'
+arch=('any')
+url='https://github.com/RandomStorm/Bluto'
+license=('GPL3')
+depends=('python2' 'python2-dnspython' 'python2-beautifulsoup4'
+         'python2-termcolor' 'python2-pythonwhois')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/darryllane/Bluto.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Bluto
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd Bluto
+
+  python2 setup.py build
+}
+
+package() {
+  cd /Bluto
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-pygdbmi
+pkgver=0.9.0.0
+pkgrel=2
+pkgdesc='Parse gdb machine interface output with Python.'
+url='https://pypi.org/project/pygdbmi/#files'
+arch=('any')
+license=('MIT')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/7e/5d/7bd1e99a5347197f864af93837f5e54eb01657ac88ede8e968a08f98c112/pygdbmi-$pkgver.tar.gz")
+sha512sums=('d7182424f2cf7e8251480910763c279294e152649ab21af1c3a72b614dacfb0b11025e767569937a21bf96195b25aa5626b56419c24ef6dd32b6a6da1dd4ccae')
+
+build() {
+  cd "pygdbmi-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "pygdbmi-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

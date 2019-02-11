@@ -1,0 +1,32 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=batman-adv
+pkgver=2018.4
+pkgrel=1
+groups=('blackarch' 'blackarch-wireless')
+pkgdesc='Batman kernel module, (included upstream since .38)'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://www.open-mesh.net/'
+license=('GPL')
+depends=('libnl')
+makedepends=('linux-headers')
+install='batman-adv.install'
+source=("http://downloads.open-mesh.org/batman/releases/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz")
+sha512sums=('15d6d6cd53bdefefb0e7bfbc7a2d4716bb9158d6aa0f3341d3dc0e8416350867b62ec5a783b1921769f846c0910f6a843182b0814f73e887fc940877caa9349b')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  make KERNELPATH=/usr/lib/modules/$(uname -r)/build
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -Dm644 "net/$pkgname/batman-adv.ko" \
+    "$pkgdir/usr/lib/modules/$(uname -r)/updates/net/$pkgname/batman_adv.ko"
+  install -Dm644 -t "$pkgdir/usr/share/doc/$pkgname/" README.external.rst \
+    CHANGELOG.rst MAINTAINERS
+}
+

@@ -1,0 +1,27 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=batman-alfred
+pkgver=2018.4
+pkgrel=1
+pkgdesc='Almighty Lightweight Fact Remote Exchange Daemon'
+groups=('blackarch' 'blackarch-wireless')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://www.open-mesh.org/'
+license=('GPL')
+depends=('gpsd' 'libnl')
+source=("http://downloads.open-mesh.org/batman/releases/batman-adv-$pkgver/alfred-$pkgver.tar.gz")
+sha512sums=('72b73f4bd56f83a01cb2a3280772c7b2bd13aff7466a01b19bbd812747487f71278b90624b42bb6e5f156b34e48e9d4592f762adc7b3b02016646e2f9c47c954')
+
+build() {
+  cd "alfred-$pkgver"
+
+  make
+}
+
+package() {
+  cd "alfred-$pkgver"
+
+  make DESTDIR="$pkgdir" PREFIX=/usr SBINDIR=/usr/bin install
+}
+

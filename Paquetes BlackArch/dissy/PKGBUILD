@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=dissy
+pkgver=10
+pkgrel=4
+pkgdesc='A graphical frontend to the objdump disassembler for compiler-generated code.'
+groups=('blackarch' 'blackarch-disassembler' 'blackarch-reversing')
+arch=('any')
+url='http://dissy.googlecode.com/'
+license=('GPL')
+depends=('pygtk' 'pywebkitgtk')
+source=("https://dissy.googlecode.com/files/dissy-$pkgver.tar.gz")
+sha512sums=('3cf5db752fc0e35ed22cd0abc5d6c4ec97838516')
+
+build() {
+  cd "$pkgname-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+
+  install -dm 755 "$pkgdir/usr/share/dissy"
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README"
+  install -m 644 ChangeLog "$pkgdir/usr/share/doc/$pkgname/ChangeLog"
+  install -m 644 TODO "$pkgdir/usr/share/doc/$pkgname/TODO"
+  install -m 644 UPGRADE "$pkgdir/usr/share/doc/$pkgname/UPGRADE"
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm 644 gfx/icon.svg "$pkgdir/usr/share/$pkgname/pixmaps/dissy.svg"
+}
+

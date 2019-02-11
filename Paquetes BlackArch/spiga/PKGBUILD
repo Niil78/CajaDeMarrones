@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=spiga
+pkgver=608.539875a
+pkgrel=1
+epoch=2
+groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
+pkgdesc='Configurable web resource scanner.'
+arch=('any')
+url='https://github.com/getdual/scripts-n-tools/blob/master/spiga.py'
+license=('custom:unknown')
+depends=('python2')
+makedepends=('git')
+source=('git+https://github.com/WSTNPHX/scripts-n-tools.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd scripts-n-tools
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd scripts-n-tools
+
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' spiga.py
+}
+
+package() {
+  cd scripts-n-tools/
+
+  install -Dm 755 spiga.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 spiga.conf "$pkgdir/usr/share/$pkgname/spiga.conf"
+}
+

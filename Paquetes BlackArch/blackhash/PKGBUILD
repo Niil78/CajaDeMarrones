@@ -1,0 +1,26 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=blackhash
+pkgver=0.2
+pkgrel=6
+groups=('blackarch' 'blackarch-cracker')
+pkgdesc="Creates a filter from system hashes"
+url="http://16s.us/blackhash/"
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('GPL')
+depends=('boost' 'crypto++')
+source=("http://16s.us/software/Blackhash/Source/Blackhash_$pkgver.tar.gz")
+sha512sums=('b03f6e445d116c52a57741b3e4c628aa476bdf9d35ede3c458e9ae99c61a9751a43fd32a7e0e41eac3223ba44a681227b1448ca38c8ec65ba84487538361ab41')
+
+build() {
+  g++ -std=c++11 -Wall -Wextra -o bh main_std_cpp.cpp -lcryptopp -lpthread
+}
+
+package() {
+
+  install -Dm 755 bh "$pkgdir/usr/bin/bh"
+
+  ln -s bh "$pkgdir/usr/bin/$pkgname"
+}
+

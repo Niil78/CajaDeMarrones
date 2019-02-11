@@ -1,0 +1,23 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=webenum
+pkgver=0.1
+pkgrel=3
+pkgdesc='Tool to enumerate http responses using dynamically generated queries and more. Useful for penetration tests against web servers.'
+depends=('python2')
+url='http://code.google.com/p/webenum/'
+groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp')
+license=('GPL')
+arch=('any')
+source=("http://webenum.googlecode.com/files/$pkgname-$pkgver.py.gz")
+sha512sums=('13ea0084b952f4323dbc1e027826997fa90bc587')
+
+prepare() {
+  sed -i 's|env python|env python2|' "webenum-$pkgver.py"
+}
+
+package() {
+  install -Dm 755 webenum-$pkgver.py "$pkgdir/usr/bin/$pkgname"
+}
+

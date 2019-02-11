@@ -1,0 +1,34 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=blackarch-config-openbox
+pkgver=26.91a25ba
+pkgrel=1
+pkgdesc='BlackArch menu, theme and config for openbox window manager.'
+arch=('any')
+groups=('blackarch-config')
+url='https://github.com/BlackArch/blackarch-config-openbox'
+license=('custom')
+depends=('openbox' 'feh' 'blackarch-wallpaper' 'terminus-font' 'xterm')
+makedepends=('git')
+replaces=('blackarch-menu-openbox')
+provides=('blackarch-menu-openbox')
+conflicts=('blackarch-menu-openbox')
+source=('git+https://github.com/BlackArch/blackarch-config-openbox.git')
+install='blackarch-config-openbox.install'
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/share/blackarch/config/openbox"
+
+  cp -a * "$pkgdir/usr/share/blackarch/config/openbox"
+}
+

@@ -1,0 +1,43 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=exescan
+pkgver=1.ad993e3
+pkgrel=2
+pkgdesc='A tool to detect anomalies in PE (Portable Executable) files.'
+groups=('blackarch' 'blackarch-binary')
+arch=('any')
+url='https://github.com/cysinfo/Exescan'
+license=('custom:unknown')
+depends=('python2')
+makedepends=('git')
+source=('git+https://github.com/cysinfo/Exescan.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Exescan
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd Exescan
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm644 ReadMe.txt "$pkgdir/usr/share/doc/$pkgname/ReadMe.txt"
+
+  rm ReadMe.txt
+
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+exec python2 exescan.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+

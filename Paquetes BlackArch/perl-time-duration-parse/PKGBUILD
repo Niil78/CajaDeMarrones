@@ -1,0 +1,39 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=perl-time-duration-parse
+pkgver=0.14
+pkgrel=1
+pkgdesc='Parse string that represents time duration.'
+arch=('any')
+license=('PerlArtistic' 'GPL')
+options=('!emptydirs')
+depends=('perl-exporter-lite')
+makedepends=('perl' 'perl-time-duration')
+url='http://search.cpan.org/dist/Time-Duration-Parse'
+source=("http://search.cpan.org/CPAN/authors/id/N/NE/NEILB/Time-Duration-Parse-$pkgver.tar.gz")
+sha512sums=('2732f6053dbc672d92a4efddab6e767f81bf1386f7b232fe1d1debe551d406b27c222c2173f9771f302bb928dac96edeb1ef3dfd0fe67d46315f671c7ad1a5b4')
+
+build() {
+  cd "Time-Duration-Parse-$pkgver"
+
+  ( export PERL_MM_USE_DEFAULT=1 PERL5LIB=""                 \
+      PERL_AUTOINSTALL=--skipdeps                            \
+      PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR='$pkgdir'"     \
+      PERL_MB_OPT="--installdirs vendor --destdir '$pkgdir'" \
+      MODULEBUILDRC=/dev/null
+
+  perl Makefile.PL
+
+  make
+  )
+}
+
+package() {
+  cd "Time-Duration-Parse-$pkgver"
+
+  make install
+
+  find "$pkgdir" -name .packlist -o -name perllocal.pod -delete
+}
+

@@ -1,0 +1,36 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=beleth
+pkgver=36.0963699
+pkgrel=1
+groups=('blackarch' 'blackarch-cracker')
+pkgdesc='A Multi-threaded Dictionary based SSH cracker.'
+url='https://github.com/chokepoint/Beleth'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('custom')
+depends=('libssh2')
+makedepends=('git')
+source=('git+https://github.com/chokepoint/Beleth.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd Beleth
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build(){
+  cd Beleth
+
+  make
+}
+
+package() {
+  cd Beleth
+
+  install -Dm 755 beleth "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 wordlist.txt "$pkgdir/usr/share/$pkgname"
+  install -Dm 644 README.md "$pkgdir/usr/share/$pkgname"
+}
+

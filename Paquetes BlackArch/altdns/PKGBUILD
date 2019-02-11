@@ -1,0 +1,39 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=altdns
+pkgver=58.319404d
+pkgrel=1
+pkgdesc='Generates permutations, alterations and mutations of subdomains and then resolves them.'
+groups=('blackarch' 'blackarch-recon')
+arch=('any')
+url='https://github.com/infosec-au/altdns'
+license=('Apache2')
+depends=('python2' 'python2-dnspython' 'python2-tldextract' 'python2-termcolor'
+         'python2-argparse')
+makedepends=('git')
+source=('git+https://github.com/infosec-au/altdns.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd $pkgname
+
+  sed -i 's|bin/env python|bin/env python2|' altdns.py
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 755 altdns.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+}
+

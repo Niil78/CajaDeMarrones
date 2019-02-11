@@ -1,0 +1,42 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=binproxy
+pkgver=8.d02fce9
+pkgrel=1
+groups=('blackarch' 'blackarch-proxy' 'blackarch-networking')
+pkgdesc='A proxy for arbitrary TCP connections.'
+arch=('any')
+license=('custom:unknown')
+makedepends=('git')
+depends=('ruby' 'ruby-bundler')
+url='https://github.com/nccgroup/BinProxy/'
+source=('git+https://github.com/nccgroup/BinProxy.git')
+install='binproxy.install'
+sha512sums=('SKIP')
+
+pkgver() {
+  cd BinProxy
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd BinProxy
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md TODO TODO.old
+
+  cp --no-preserve=ownership -a * "$pkgdir/usr/share/$pkgname"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+#!/bin/sh
+cd /usr/share/$pkgname
+bundle-2.3 exec bin/binproxy bin/binproxy "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+}
+

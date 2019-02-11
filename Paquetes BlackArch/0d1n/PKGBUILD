@@ -1,0 +1,44 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=0d1n
+pkgver=207.ccaf57d
+pkgrel=1
+epoch=1
+groups=('blackarch' 'blackarch-webapp' 'blackarch-fuzzer' 'blackarch-scanner')
+pkgdesc='Web security tool to make fuzzing at HTTP inputs, made in C with libCurl.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://github.com/CoolerVoid/0d1n'
+license=('GPL3')
+depends=('make')
+makedepends=('git')
+source=('git+https://github.com/CoolerVoid/0d1n.git')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  make
+}
+
+package() {
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 755 0d1n "$pkgdir/usr/bin/$pkgname"
+
+  cp -a --no-preserve=ownership payloads response2find response_sources tables \
+    "$pkgdir/usr/share/$pkgname"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md README.txt
+
+  cp -a doc/* "$pkgdir/usr/share/doc/$pkgname/"
+}
+
