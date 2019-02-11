@@ -1,0 +1,2 @@
+[Sun Feb 10 20:49:26 2019] ssh-honeypot 0.0.8 by Daniel Roberson started on port 22. PID 21370
+[Sun Feb 10 20:49:26 2019] FATAL: ssh_bind_listen(): Failed to import private RSA host key

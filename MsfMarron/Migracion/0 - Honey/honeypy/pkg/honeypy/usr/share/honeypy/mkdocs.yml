@@ -1,0 +1,10 @@
+site_name: HoneyPy Docs
+theme: readthedocs
+pages:
+- Home: index.md
+- Quickstart: quickstart.md
+- Installing: installing.md
+- Configuring: configuring.md
+- Plugins: plugins.md
+- Developers: developers.md
+- References: references.md
