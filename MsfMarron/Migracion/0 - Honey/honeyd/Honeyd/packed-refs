@@ -1,0 +1,30 @@
+# pack-refs with: peeled fully-peeled sorted 
+39176295550a49e9a431ea2875df2385356fbc73 refs/heads/bcastNameFix
+43456ff1acc7507411e3585684f09e302cfe5b49 refs/heads/dhcpWork
+c035e38d8d738a0d2409f90dac6e0bc905bd2e83 refs/heads/honeypot_broadcasts
+0b1f24a8ccb7df0a50239b7654b671ee93120b87 refs/heads/integration
+9a270e673b5b164be46fff174fd019a5b73f3456 refs/heads/ipv6
+a0f3d64834781cf2c02f6d7302638f54c68dfdb0 refs/heads/master
+45fddb171dc2ea33519513d15db6019975dd4f7f refs/heads/mssql
+b3b23a5209be779a5ef047d0c2adf03b25c8ec78 refs/heads/names_sql
+63e43f41ce20ff8c0b62ef6b35a7b6261ab3de3f refs/heads/scripts
+aed48091da1dde9b64a054d127cf11dbc4718853 refs/heads/smb-script
+bff25e31c19801c877df9e03da5300e9956cab05 refs/pull/100/head
+2518b2ba2281197b4820bfe0a987fea9e09a14cb refs/pull/100/merge
+612d06bd3168ca2603afd919527369ad64da37b9 refs/pull/101/head
+95fc43d96ceda7d40e3220a1e06734672664037d refs/pull/101/merge
+8352249dd17f007268cd747fbc8856530d7b2eb6 refs/pull/46/head
+47437d06793c27c25e5c94cc4aee305f47b597cd refs/pull/46/merge
+2525dcbca55660e5c78b8589a6d914289a14bf64 refs/pull/72/head
+f1a0d27790c61d3fd96d58d567ecaac97ae000c8 refs/pull/72/merge
+7ffbc5b5d08a2bdcdb682fe4a00a385ae77a8a9a refs/pull/80/head
+4809e8046d5b42f12b189d8d7208561637ebdf60 refs/pull/80/merge
+fc22a5f394644da6ab54e9bd098b681d89f67d80 refs/pull/88/head
+6181e1d9f7796a69a5a132f907632d0e22758842 refs/pull/95/head
+be23aa1894374dcd775d83630497d8cf9b85347b refs/pull/95/merge
+81a62ec8ad2d8030d6294bb452370b1dc098aea2 refs/tags/honeyd-1.6.7
+^64d087c1cf29cbd038cdbf25ef4f9d9a738b626c
+77bd4e6ac0b04d3211203f6a27acd9154d6fd5ac refs/tags/nova-13.07
+^411c77219f56033b3d7c811410ebc192eebc65ff
+5936e5c7fbdac777948d170763a16a9d27d79521 refs/tags/nova-13.09
+^c135fea0837ea6c60543647ffdddb26dd024ffbc
